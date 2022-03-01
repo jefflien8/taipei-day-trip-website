@@ -14,41 +14,34 @@ db=pymysql.connect(
 cursor=db.cursor()
 
 list=data["result"]["results"]
-id="_id"
-name="stitle"
-category="CAT2"
-description="xbody"
-address="address"
-transport="info"
-mrt="MRT"
-latitude="latitude"
-longitude="longitude"
-image="file"   
+# id="_id"
+# name="stitle"
+# category="CAT2"
+# description="xbody"
+# address="address"
+# transport="info"
+# mrt="MRT"
+# latitude="latitude"
+# longitude="longitude"
+# image="file"   
 
-for j in list:
-    images=j['file'].lower().split('https')
-    for i in images:
-        if i[-4:]=='.jpg':
+# for j in list:
+#     images=j['file'].lower().split('https')
+#     for i in images:
+#         if i[-4:]=='.jpg':
+#             print('https'+i)
 
-            print('https'+i)
-
-# for i in list:  
-#     result=i["_id"],i["stitle"],i["CAT2"],i["xbody"],i["address"],i["info"],i["MRT"],i["latitude"],i["longitude"]
-
-
-
-# i["file"]
-# sql='''INSERT INTO `spot`(id,name,category,description,address,transport,mrt,latitude,longitude,images) 
-# VALUE(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'''
-# for i in list:
-#     try:
-#         cursor.execute(sql,(
-#             i["_id"],i["stitle"],i["CAT2"],
-#             i["xbody"],i["address"],i["info"],
-#             i["MRT"],i["latitude"],i["longitude"])
-#         )
-#         db.commit()
-#     except:
-#         db.rollback()
-#         print('error')
+sql='''INSERT INTO `spot`(id,name,category,description,address,transport,mrt,latitude,longitude,images) 
+VALUE(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'''
+for i in list:
+    try:
+        cursor.execute(sql,(
+            i["RowNumber"],i["stitle"],i["CAT2"],
+            i["xbody"],i["address"],i["info"],
+            i["MRT"],i["latitude"],i["longitude"],i["file"])
+        )
+        db.commit()
+    except:
+        db.rollback()
+        print(i["RowNumber"])
     
