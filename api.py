@@ -1,4 +1,3 @@
-
 from flask import *
 import pymysql
 apiBlueprint=Blueprint("api",__name__)
@@ -21,6 +20,10 @@ def api():
             `mrt`,`latitude`,`longitude`,`images`FROM `spot` ORDER BY `id` LIMIT %s,%s'''
         cursor.execute(sql,(page*12,page+12))
         result=cursor.fetchall()
+        cursor.execute(sql,((page+1)*12,(page+1)+12))
+        resultNext=cursor.fetchall()
+        resultNextLen=len(resultNext)
+        print(resultNextLen)
         data=[]
         for i in result:
             data.append({
@@ -37,17 +40,26 @@ def api():
                     i[9]
                     ]
                 })
-
-        AllData={"nextPage":page+1,
-            "data":data
-        }
-        return jsonify(AllData)
+        if resultNextLen==0:
+            nextPage=None
+            AllData={"nextPage":nextPage,
+                "data":data
+            }
+            return jsonify(AllData)
+        else:
+            AllData={"nextPage":page+1,
+                "data":data
+            }
+            return jsonify(AllData)
 
     elif keyword!=None:
         sql='''SELECT `id`,`name`,`category`,`description`,`address`,`transport`,
         `mrt`,`latitude`,`longitude`,`images`FROM `spot` WHERE `name` LIKE %s ORDER BY `id` LIMIT %s,%s'''
         cursor.execute(sql,("%"+keyword+"%",page*12,page+12))
         seachResult=cursor.fetchall()
+        cursor.execute(sql,("%"+keyword+"%",(page+1)*12,(page+1)+12))
+        seachResultNext=cursor.fetchall()
+        seachResultNextLen=len(seachResultNext)
         sreachData=[]
         for j in seachResult:
             sreachData.append({
@@ -64,11 +76,20 @@ def api():
                     j[9]
                     ]
                 })
-        resultData={"nextPage":page+1,
+        if seachResultNextLen == 0:
+            nextPage=None
+            resultData={"nextPage":nextPage,
+                "data":sreachData
+            }
+            return jsonify(resultData)
+        else: 
+            resultData={"nextPage":page+1,
             "data":sreachData
-        }
-        return jsonify(resultData)
+            }
+            return jsonify(resultData)
 
+    else:
+        return {"error": True,"message": "伺服器錯誤，請稍後再試"}
 
 @apiBlueprint.route("/api/attractions/<attractionId>")
 def apiID(attractionId):
@@ -78,7 +99,7 @@ def apiID(attractionId):
     result=cursor.fetchone()
     if result==None:
         return {"error": True,"message": "無此編號"}
-    else:
+    elif result!=None:
         Data={
             "data": {
                 "id": result[0],
@@ -96,3 +117,5 @@ def apiID(attractionId):
              }
         }      
         return jsonify(Data)
+    else:
+        return {"error": True,"message": "伺服器錯誤，請稍後再試"}
