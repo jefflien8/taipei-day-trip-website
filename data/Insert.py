@@ -1,6 +1,6 @@
 import json
 import pymysql
-with open('data/taipei-attractions.json', encoding="utf-8") as f:
+with open('~/repo/data/taipei-attractions.json', encoding="utf-8") as f:
     data=json.load(f)
 
 db=pymysql.connect(
