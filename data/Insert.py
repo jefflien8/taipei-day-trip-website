@@ -30,13 +30,13 @@ for j in list:
                 
 
 sql='''INSERT INTO `spot`(id,name,category,description,address,transport,mrt,latitude,longitude,images) 
-VALUE(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'''
+VALUE(%s,%s,%s,%s,%s,%s,%s,%s,%s)'''
 for i in list:
     try:
         cursor.execute(sql,(
             i["RowNumber"],i["stitle"],i["CAT2"],
             i["xbody"],i["address"],i["info"],
-            i["MRT"],i["latitude"],i["longitude"],i["file"])
+            i["MRT"],i["latitude"],i["longitude"],)
         )
         db.commit()
     except:
