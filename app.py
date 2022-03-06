@@ -1,5 +1,9 @@
 from flask import *
+from api import apiBlueprint
+
 app=Flask(__name__)
+app.register_blueprint(apiBlueprint)
+app.secret_key="123456"
 app.config["JSON_AS_ASCII"]=False
 app.config["TEMPLATES_AUTO_RELOAD"]=True
 
@@ -17,4 +21,4 @@ def booking():
 def thankyou():
 	return render_template("thankyou.html")
 
-app.run(port=3000)
+app.run(host='0.0.0.0',port=3000)
