@@ -5,7 +5,7 @@ db=pymysql.connect(
     host='localhost', 
     port=3306, 
     user='root', 
-    passwd='12345678', 
+    passwd='123456', 
     db='website', 
     charset='utf8'
     )
@@ -21,12 +21,14 @@ def api():
         result=cursor.fetchall()
         cursor.execute(sql,((page+1)*12,12))
         resultNext=cursor.fetchall()
+        cursor.close
         resultNextLen=len(resultNext)
         data=[]
         for i in result:
             urlsql='''SELECT`url` FROM `url` WHERE `url_id`= %s'''
             cursor.execute(urlsql,(i[0]))
             urlResult=cursor.fetchall()
+            cursor.close
             url=[url[0] for url in urlResult]
             data.append({
                 "id":i[0],
@@ -59,12 +61,14 @@ def api():
         seachResult=cursor.fetchall()
         cursor.execute(sql,("%"+keyword+"%",(page+1)*12,12))
         seachResultNext=cursor.fetchall()
+        cursor.close
         seachResultNextLen=len(seachResultNext)
         sreachData=[]
         for j in seachResult:
             urlsql='''SELECT`url` FROM `url` WHERE `url_id`= %s'''
             cursor.execute(urlsql,(j[0]))
             urlResult=cursor.fetchall()
+            cursor.close
             url=[url[0] for url in urlResult]
             sreachData.append({
                 "id":j[0],
@@ -99,12 +103,14 @@ def apiID(attractionId):
     `mrt`,`latitude`,`longitude`,`images`FROM `spot` WHERE `id`=%s'''
     cursor.execute(sql,(attractionId))
     result=cursor.fetchone()
+    cursor.close
     if result==None:
         return {"error": True,"message": "無此編號"}
     elif result!=None:
         urlsql='''SELECT`url` FROM `url` WHERE `url_id`= %s'''
         cursor.execute(urlsql,(result[0]))
         urlResult=cursor.fetchall()
+        cursor.close
         url=[url[0] for url in urlResult]
         Data={
             "data": {

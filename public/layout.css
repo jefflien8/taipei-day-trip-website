@@ -1,0 +1,154 @@
+@import url(https://fonts.googleapis.com/earlyaccess/notosanstc.css);
+
+body{
+    font-family: 'Noto Sans TC', '微軟正黑體', sans-serif;
+    /* font-size: 20px; */
+    margin:0px;
+    padding:0px
+}
+.navbar{
+    overflow: hidden;
+    display: flex;
+    margin: 5px;
+    background: #FFFFFF;
+}
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+.header{
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    width: 1200px;
+    /* height: 34px;
+    left: 360px;
+    top: 10px; */
+}
+.title{
+    display: flex;
+    /* flex: none; */
+    height: 34px;
+    width: 150px;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 30px;
+    line-height: 34px;
+    /* text-align: left; */
+    color: rgba(68, 136, 153, 1);
+    /* font-size: 20px; */
+
+}
+::placeholder{
+    color: #757575;
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 13px;
+    display: flex;
+    align-items: center;
+}
+.frame2{
+    display: flex;
+    justify-content: flex-end;
+    flex:auto;
+    margin-right: 10px;
+    text-align: center ;
+}
+.welcome{
+    display: flex;
+    flex-direction: row;
+    /* justify-content: flex-end;
+    align-items: flex-start; */
+    flex: none;
+    justify-content: center;
+    align-items: center;
+    height: 320px;
+    width: 100%;
+    bottom: 1000px;
+    background: linear-gradient(135deg, #AADDEE 0%, #66AABB 100%);
+}
+.slogan{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    color: #f8f8f8;
+}
+.weclomeImg{
+    background:url(welcome\ 1.png);
+    background-repeat:no-repeat;
+    position: static;
+    flex: none;
+    width: 650px;
+    height: 320px;
+    /* left: 1038px; */
+    top: 0px;
+    object-fit: none;
+    aspect-ratio: 1/1;
+}
+.text{
+    flex:auto;
+    font-size: 40px;
+    font-weight: bold;
+    text-align: center;
+}
+.frame{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.pic{
+    flex: none;
+    width: 280px;
+    margin: 10px;
+    align-items: center;
+    justify-content: center;
+    /* background-color: darkgray; */
+    text-align: left;
+    color: #757575;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #E8E8E8;
+    box-sizing: border-box;
+}
+img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    aspect-ratio: 16/9;
+}
+.logo{
+    height: 25px;
+    width: 25px;
+    display: none;
+}
+
+@media (max-width:1200px) {
+    .frame{
+        width: 90%;
+    }
+    .pic{
+        width: 45%;
+    }
+}
+@media (max-width:600px) {
+    .frame{
+        width: 90%;
+    }
+    .pic{
+        width: 90%;
+    }
+    .right{
+        display: none;
+    }
+    .logo{
+        display: block
+    }
+
+}
