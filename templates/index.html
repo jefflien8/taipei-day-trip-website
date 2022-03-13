@@ -68,7 +68,8 @@
 
         let nextPage=0;
         function getData(){
-            url="http://192.168.100.2:3000/api/attractions?page="+nextPage;
+            url="/"
+            url="http://3.229.198.70:3000/api/attractions?page="+nextPage;
             if (nextPage==null){
                 return "STOP";
             }
@@ -145,7 +146,7 @@
                 return;
             }
             else{
-                url="http://192.168.100.2:3000/api/attractions?page="+nextPageSearch+"&keyword="+searchText;
+                url="http://3.229.198.70:3000/api/attractions?page="+nextPageSearch+"&keyword="+searchText;
                 if(nextPageSearch==null){
                     return "stop";
                 }
