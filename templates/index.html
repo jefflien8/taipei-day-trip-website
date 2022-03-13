@@ -3,27 +3,25 @@
 <head>
     <meta content="width=device-width, initial-scale=1.0" />
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Taipei Trip 台北一日遊</title>
     <link rel="stylesheet" type="text/css" href="/layout.css">
 
 </head>
 
 <body onload="getData();">
-    <div id="navbar">
+    <div class="navbar">
         <div class="header">
             <div class="title">台北一日遊</div>
             <div class="frame2">
-                    <a href="">預定行程</a>
-                    <a href="">登入/註冊</a>
+                    <a href="" style="color: #666666;text-decoration: none;margin-right: 10px;">預定行程</a>
+                    <a href="" style="color: #666666;text-decoration: none;">登入/註冊</a>
             </div>
-            <!-- <div>
-                <img class=logo src="hamburger.png"/>
-            </div> -->
         </div>
     </div>
 
     <div class="welcome">
-        <div>
+        <div class="front" style="position:absolute;top:25%;left:19%">
             <div class="slogan">
                 <div>
                     <div style="font-weight: 700;
@@ -40,20 +38,19 @@
                 </div>
             </div>
 
-            <div class="sreach" style="display: flex;margin-top: 20px">
-                        <div>
-                            <input tpye="text" id="searchText" placeholder="輸入景點名稱查詢"
-                                style="background:#FFFFFF;width: 400px;height: 46px;">
-                            </input>
-                        </div>
-                        <div >
-                            <button  onclick="search();" style="
-                                background: #448899;width: 60px;height: 46px;left: 400px;">
-                                <div class="icon" style=
-                                "background: url(/icon_search.png);background-repeat:no-repeat;width: 30px;height: 30px;left: 0px;top: 0px;align-items: center;justify-content: center;">
-                                </div>
-                            </button>
-                        </div>
+            <div class="search" style="display: flex;margin-top: 20px">
+                        
+                <input tpye="text" id="searchText" placeholder="輸入景點名稱查詢"
+                    style="background:#FFFFFF;width: 400px;height: 46px;">
+                </input>
+            
+                <button  onclick="search();" style="
+                    background: #448899;width: 60px;height: 46px;left: 400px;">
+                    <div class="icon" style=
+                    "background: url(/icon_search.png);background-repeat:no-repeat;width: 30px;height: 30px;left: 0px;top: 0px;align-items: center;justify-content: center;">
+                    </div>
+                </button>
+                        
             </div>
         </div>
 
@@ -61,157 +58,56 @@
     </div>
     
     <div class=frame id=0 style="margin-top: 50px;"></div>
-
+        <div id="nothing" style="text-align: center;"></div>
+    <div class="bottom">
+        COPYRIGHT © 2021 台北一日遊
+    </div>
     <div id="listEnd"></div>
 
     <script type="text/javascript">
 
-        let allnames = [];
-        let allpics = [];
-        let allmrts = [];
-        let allcates = [];
-        let nextPage=[0,];
-    
+        let nextPage=0;
         function getData(){
-            url="http://192.168.100.2:3000/api/attractions?page="+[nextPage.length-1];
-            // if ([nextPage.length-1]==null){
-            //     return "STOP";
-            // }
+            url="http://192.168.100.2:3000/api/attractions?page="+nextPage;
+            if (nextPage==null){
+                return "STOP";
+            }
             fetch(url, {method:"GET"})
             .then((response) => {
                 return response.json(); 
             })
             .then((data) => {
                 let list=data.data;
+                let allnames = [];
+                let allpics = [];
+                let allmrts = [];
+                let allcates = [];
                 for (let i in list){
-                        let names=list[i].name;
-                        allnames.push(names);
-                        let pics=list[i].images[0];
-                        allpics.push(pics);
-                        let mrts=list[i].mrt;
-                        allmrts.push(mrts);
-                        let cates=list[i].category;
-                        allcates.push(cates);
-                    }
+                    let names=list[i].name;
+                    allnames.push(names);
+                    let pics=list[i].images[0];
+                    allpics.push(pics);
+                    let mrts=list[i].mrt;
+                    allmrts.push(mrts);
+                    let cates=list[i].category;
+                    allcates.push(cates);
+                }
                 
-                for(let i=[nextPage.length-1]*12;i<[nextPage.length-1]*12+12;i++){
-                    if (i>57){
-                        break;
-                    }
-
-                let list=document.getElementById('0');
-                let newDiv=document.createElement('div');
-                list.appendChild(newDiv);
-                newDiv.className='pic';
-                
-                let image = document.createElement('img');
-                newDiv.appendChild(image);
-                let objectURL =allpics[i];
-                image.src = objectURL;        
-
-                let word=document.createElement('div');
-                word.style.cssText="font-weight: 700;font-size: 16px;line-height: 13px;margin-top: 15px;margin-left: 15px;margin-bottom:0px;"
-                newDiv.appendChild(word);  
-                let spotName=allnames[i];
-                let nameNode=document.createTextNode(spotName);
-                word.appendChild(nameNode);
-                let flex=document.createElement('div');
-                flex.style.cssText="display: flex;"
-                word.appendChild(flex);
-
-                let left=document.createElement('div');
-                left.style.cssText="font-weight: 400;font-size: 16px;line-height: 13px;margin-top: 15px;margin-bottom: 15px;flex: auto;text-align:left;"
-                flex.appendChild(left);
-
-                let mrtName=allmrts[i];
-                let mrtNode=document.createTextNode(mrtName);
-                left.appendChild(mrtNode);
-
-                let right=document.createElement('div');
-                right.style.cssText="font-weight: 400;font-size: 16px;line-height: 13px;margin-top: 15px;margin-bottom: 15px;margin-right:10px;text-align:right;flex: auto;;"
-                flex.appendChild(right);
-                let cateName=allcates[i];
-                let cateNode=document.createTextNode(cateName);
-                right.appendChild(cateNode);         
-                }                
-                nextPage.push(data.nextPage);
-                console.log(nextPage);
-            })
-            .catch((err) => {
-                console.log('錯誤:', err);
-            });
-            let listEnd=document.getElementById('listEnd');
-            let options={
-            root:null,
-            rootMargin:"0px 0px 100px 0px",
-            threshold:[0]
-            };
-        }
-                        let callback = ([entry])=>{
-                    if(entry && entry.isIntersecting){
-                        setTimeout(() => {
-                            getData();
-                        }, 1500);
-                    }
-                }
-            let observer=new IntersectionObserver (callback,options);
-            observer.observe(listEnd);
-    </script>  
-
-    <script type="text/javascript">
-        function search(){
-            let searchallnames = [];
-            let searchallpics = [];
-            let searchallmrts = [];
-            let searchallcates = []
-            let nextPageSearch=[0,];
-            let searchText=document.getElementById("searchText").value;
-            url="http://192.168.100.2:3000/api/attractions?page=0&keyword="+searchText;
-            fetch(url, {method:"GET"})
-            .then((response) => {
-                return response.json(); 
-            })
-            .then((data) => {
-                let origin=document.getElementsByClassName("pic");
-                for (let i = 0; i < origin.length; i++) {
-                    origin[i].style.display = "none"; 
-                }
-                console.log(data.data);
-                if (data.data[0]==null){
-                    let nothing=document.createElement("div");
-                    listEnd.appendChild(nothing);
-                    let nothingText=document.createTextNode("查無結果");
-                    nothing.appendChild(nothingText);
-                }
-                else{
-                    let list=data.data;
-                    for (let i in list){
-                            let names=list[i].name;
-                            searchallnames.push(names);
-                            let pics=list[i].images[0];
-                            searchallpics.push(pics);
-                            let mrts=list[i].mrt;
-                            searchallmrts.push(mrts);
-                            let cates=list[i].category;
-                            searchallcates.push(cates);
-                        }
-                    
-                    for(let i=0;i<12;i++){
-
-                    let list=document.getElementById('0');
+                for (i=0;i<allnames.length;i++){
+                    let spotList=document.getElementById('0');
                     let newDiv=document.createElement('div');
-                    list.appendChild(newDiv);
-                
+                    spotList.appendChild(newDiv);
                     newDiv.className='pic';
+                    
                     let image = document.createElement('img');
                     newDiv.appendChild(image);
-                    let objectURL =searchallpics[i];
+                    let objectURL =allpics[i];
                     image.src = objectURL;        
 
                     let word=document.createElement('div');
                     word.style.cssText="font-weight: 700;font-size: 16px;line-height: 13px;margin-top: 15px;margin-left: 15px;margin-bottom:0px;"
                     newDiv.appendChild(word);  
-                    let spotName=searchallnames[i];
+                    let spotName=allnames[i];
                     let nameNode=document.createTextNode(spotName);
                     word.appendChild(nameNode);
                     let flex=document.createElement('div');
@@ -222,41 +118,148 @@
                     left.style.cssText="font-weight: 400;font-size: 16px;line-height: 13px;margin-top: 15px;margin-bottom: 15px;flex: auto;text-align:left;"
                     flex.appendChild(left);
 
-                    let mrtName=searchallmrts[i];
+                    let mrtName=allmrts[i];
                     let mrtNode=document.createTextNode(mrtName);
                     left.appendChild(mrtNode);
 
                     let right=document.createElement('div');
                     right.style.cssText="font-weight: 400;font-size: 16px;line-height: 13px;margin-top: 15px;margin-bottom: 15px;margin-right:10px;text-align:right;flex: auto;;"
                     flex.appendChild(right);
-                    let cateName=searchallcates[i];
+                    let cateName=allcates[i];
                     let cateNode=document.createTextNode(cateName);
                     right.appendChild(cateNode);         
-                    }                
-                    nextPageSearch.push(data.nextPage);
-                    console.log(nextPageSearch);
-                }
+                }                
+                nextPage=data.nextPage;
             })
             .catch((err) => {
                 console.log('錯誤:', err);
             });
-            
-        }
+            }
 
-    </script>
-     
-    <script type="text/javascript">
-        // window.onscroll = function() {myFunction()};
-        // let navbar = document.getElementById("navbar");
-        // let sticky = navbar.offsetTop;
-        // function myFunction() {
-        //     if (window.pageYOffset >= sticky) {
-        //         navbar.classList.add("sticky")
-        //     } 
-        //     else {
-        //         navbar.classList.remove("sticky");
-        //     }
-        // }
-    </script>
+        let nextPageSearch=0;
+        function search(){
+            console.log(1);
+            let searchText=document.getElementById("searchText").value;
+            console.log(searchText);
+            if(searchText==""){
+                return;
+            }
+            else{
+                url="http://192.168.100.2:3000/api/attractions?page="+nextPageSearch+"&keyword="+searchText;
+                if(nextPageSearch==null){
+                    return "stop";
+                }
+                fetch(url, {method:"GET"})
+                .then((response) => {
+                    return response.json();
+                })
+                .then((data) =>{
+    
+                    let origin=document.getElementsByClassName("pic");
+                    for (let i = 0; i < origin.length; i++) {
+                        origin[i].style.display = "none"; 
+                    }
+                    console.log(data.data);
+                    if (data.data[0]==null){
+                        let nothing=document.getElementById("nothing");
+                        console.log(nothing.textContent);
+                        if (!nothing.textContent ){
+                            let nothingText=document.createTextNode("查無結果");
+                            nothing.appendChild(nothingText);
+                        }
+                        
+ 
+                    }
+                    else{
+                        let searchallnames = [];
+                        let searchallpics = [];
+                        let searchallmrts = [];
+                        let searchallcates = []
+                        let list=data.data;
+                        for (let i in list){
+                            let names=list[i].name;
+                            searchallnames.push(names);
+                            let pics=list[i].images[0];
+                            searchallpics.push(pics);
+                            let mrts=list[i].mrt;
+                            searchallmrts.push(mrts);
+                            let cates=list[i].category;
+                            searchallcates.push(cates);
+                            }
+                        
+                        for(let i=0;i<searchallnames.length;i++){
+                            
+                            let list=document.getElementById('0');
+                            let newDiv=document.createElement('div');
+                            list.appendChild(newDiv);
+                            newDiv.className='Searchpic';
+
+                            let image = document.createElement('img');
+                            newDiv.appendChild(image);
+                            let objectURL =searchallpics[i];
+                            image.src = objectURL;        
+
+                            let word=document.createElement('div');
+                            word.style.cssText="font-weight: 700;font-size: 16px;line-height: 13px;margin-top: 15px;margin-left: 15px;margin-bottom:0px;"
+                            newDiv.appendChild(word);  
+                            let spotName=searchallnames[i];
+                            let nameNode=document.createTextNode(spotName);
+                            word.appendChild(nameNode);
+                            let flex=document.createElement('div');
+                            flex.style.cssText="display: flex;"
+                            word.appendChild(flex);
+
+                            let left=document.createElement('div');
+                            left.style.cssText="font-weight: 400;font-size: 16px;line-height: 13px;margin-top: 15px;margin-bottom: 15px;flex: auto;text-align:left;"
+                            flex.appendChild(left);
+
+                            let mrtName=searchallmrts[i];
+                            let mrtNode=document.createTextNode(mrtName);
+                            left.appendChild(mrtNode);
+
+                            let right=document.createElement('div');
+                            right.style.cssText="font-weight: 400;font-size: 16px;line-height: 13px;margin-top: 15px;margin-bottom: 15px;margin-right:10px;text-align:right;flex: auto;;"
+                            flex.appendChild(right);
+                            let cateName=searchallcates[i];
+                            let cateNode=document.createTextNode(cateName);
+                            right.appendChild(cateNode);         
+                        }                
+                    nextPageSearch=data.nextPage;
+                  
+                }
+            })
+
+        .catch((err) => {
+            console.log('錯誤:', err);
+        });
+        }
+    }
+
+        let listEnd=document.getElementById('listEnd');
+        let options={
+            root:null,
+            rootMargin:"0px 0px 100px 0px",
+            threshold:[0]
+        };
+        console.log(nextPageSearch[nextPageSearch.length-1]);
+
+        let callback = ([entry])=>{
+            let searchText=document.getElementById("searchText").value;
+            if(entry && entry.isIntersecting && searchText){
+                setTimeout(() => {
+                    search();
+                }, 1500);
+            }
+            else if(entry && entry.isIntersecting ){
+                setTimeout(() => {
+                    getData();
+                }, 1500);
+            }
+
+        }
+        let observer=new IntersectionObserver (callback,options);
+        observer.observe(listEnd);
+
+    </script>  
 </body>
 </html>

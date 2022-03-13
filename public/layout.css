@@ -2,29 +2,32 @@
 
 body{
     font-family: 'Noto Sans TC', '微軟正黑體', sans-serif;
-    /* font-size: 20px; */
     margin:0px;
     padding:0px
+}
+.front{
+    z-index: 3;
 }
 .navbar{
     overflow: hidden;
     display: flex;
     margin: 5px;
     background: #FFFFFF;
-}
-.sticky {
-    position: fixed;
-    top: 0;
     width: 100%;
+    height: 54px;
+    position: sticky;
+    top: 0;
+    z-index: 4;
 }
+
 .header{
     display: flex;
     margin-left: auto;
     margin-right: auto;
-    width: 1200px;
-    /* height: 34px;
+    width: 60%;
+    height: 34px;
     left: 360px;
-    top: 10px; */
+    top: 10px;
 }
 .title{
     display: flex;
@@ -32,12 +35,10 @@ body{
     height: 34px;
     width: 150px;
     font-style: normal;
-    font-weight: bold;
+    font-weight: 700;
     font-size: 30px;
     line-height: 34px;
-    /* text-align: left; */
     color: rgba(68, 136, 153, 1);
-    /* font-size: 20px; */
 
 }
 ::placeholder{
@@ -53,22 +54,27 @@ body{
 .frame2{
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     flex:auto;
     margin-right: 10px;
     text-align: center ;
+    font-weight: 400;
+    font-size: 16px;
 }
 .welcome{
     display: flex;
     flex-direction: row;
-    /* justify-content: flex-end;
-    align-items: flex-start; */
-    flex: none;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-end;
+    align-items: flex-start;
+    flex: auto;
+    position: relative;
     height: 320px;
     width: 100%;
-    bottom: 1000px;
-    background: linear-gradient(135deg, #AADDEE 0%, #66AABB 100%);
+
+    background-image: 
+    linear-gradient(135deg, #AADDEE 0%, #66AABB 100%);
+    background-repeat:no-repeat;
+    background-position:right;
 }
 .slogan{
     display: flex;
@@ -77,16 +83,30 @@ body{
     color: #f8f8f8;
 }
 .weclomeImg{
-    background:url(welcome\ 1.png);
+    background-image:url(welcome\ 1.png);
     background-repeat:no-repeat;
-    position: static;
-    flex: none;
-    width: 650px;
-    height: 320px;
-    /* left: 1038px; */
-    top: 0px;
+
+    width: 50%;
+
+
     object-fit: none;
     aspect-ratio: 1/1;
+}
+.bottom{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #757575;
+    position: relative;
+    width: 100%;
+    height: 104px;
+
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 13px;
+
+    justify-content: center;
+    color: #FFFFFF;
 }
 .text{
     flex:auto;
@@ -109,7 +129,19 @@ body{
     margin: 10px;
     align-items: center;
     justify-content: center;
-    /* background-color: darkgray; */
+    text-align: left;
+    color: #757575;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #E8E8E8;
+    box-sizing: border-box;
+}
+.Searchpic{
+    flex: none;
+    width: 280px;
+    margin: 10px;
+    align-items: center;
+    justify-content: center;
     text-align: left;
     color: #757575;
     font-size: 1rem;
@@ -129,26 +161,68 @@ img{
     display: none;
 }
 
-@media (max-width:1200px) {
+@media screen and (min-width:601px) and (max-width:1200px) {
     .frame{
         width: 90%;
     }
     .pic{
         width: 45%;
     }
+    .Searchpic{
+        width: 45%;
+    }
 }
-@media (max-width:600px) {
+@media screen and (min-width: 360px) and (max-width:600px) {
+
+    .weclomeImg{
+        background-image:url(welcome\ 1\ small.png);
+        background-position: right bottom;
+        z-index: 2;
+        position:static;
+    }
+
+    .header{
+        position: relative;
+        width: 100%;
+
+        left: 0px;
+        top: 2px;
+
+    }
+    .title{
+        width: 150px;
+        height: 34px;
+        left: 10px;
+        top: 10px;;
+    }
+    .front{
+        position:relative;
+        width: 80%;
+
+    }
+    .search{
+        width: 80%;
+        height: 46px;
+    }
+    input{
+        width: 230px;
+        height: 46px;
+    }
+    botton{
+        width: 60px;
+        height: 46px;
+    }
+    .welcome{
+        height: 280px;
+    }
     .frame{
         width: 90%;
     }
     .pic{
         width: 90%;
     }
-    .right{
-        display: none;
-    }
-    .logo{
-        display: block
+    .Searchpic{
+        width: 90%;
     }
 
 }
