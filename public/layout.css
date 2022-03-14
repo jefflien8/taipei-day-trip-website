@@ -24,7 +24,7 @@ body{
     display: flex;
     margin-left: auto;
     margin-right: auto;
-    width: 60%;
+    width: 1250px;
     height: 34px;
     left: 360px;
     top: 10px;
@@ -48,8 +48,12 @@ body{
     font-weight: 700;
     font-size: 16px;
     line-height: 13px;
+    position: absolute;
     display: flex;
     align-items: center;
+    left: 20px;
+    bottom: 17px;
+    
 }
 .frame2{
     display: flex;
@@ -81,6 +85,14 @@ body{
     flex-direction: column;
     align-items: flex-start;
     color: #f8f8f8;
+}
+.icon{
+    border:2px #448899 solid;
+    background-repeat:no-repeat;
+    width: 30px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
 }
 .weclomeImg{
     background-image:url(welcome\ 1.png);
@@ -178,7 +190,9 @@ img{
         background-image:url(welcome\ 1\ small.png);
         background-position: right bottom;
         z-index: 2;
-        position:static;
+        width: 100%;
+        aspect-ratio: 16/9;
+        object-fit:cover;
     }
 
     .header{
@@ -213,16 +227,17 @@ img{
         height: 46px;
     }
     .welcome{
+        align-items: flex-end;
         height: 280px;
     }
     .frame{
-        width: 90%;
+        width: 98%;
     }
     .pic{
-        width: 90%;
+        width: 98%;
     }
     .Searchpic{
-        width: 90%;
+        width: 98%;
     }
 
 }

@@ -1,6 +1,8 @@
 from flask import *
+from flask_cors import CORS
 import pymysql
 apiBlueprint=Blueprint("api",__name__)
+CORS(apiBlueprint)
 db=pymysql.connect(
     host='localhost', 
     port=3306, 

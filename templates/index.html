@@ -38,17 +38,15 @@
                 </div>
             </div>
 
-            <div class="search" style="display: flex;margin-top: 20px">
+            <div class="search" style="display: flex;margin-top: 20px;filter: drop-shadow(0px 0px 20px #AABBCC);">
                         
                 <input tpye="text" id="searchText" placeholder="輸入景點名稱查詢"
-                    style="background:#FFFFFF;width: 400px;height: 46px;">
+                    style="background:#FFFFFF;width: 400px;height: 46px;  padding: 0px;border-width: 0px;border-radius: 5px 0px 0px 5px;">
                 </input>
             
                 <button  onclick="search();" style="
-                    background: #448899;width: 60px;height: 46px;left: 400px;">
-                    <div class="icon" style=
-                    "background: url(/icon_search.png);background-repeat:no-repeat;width: 30px;height: 30px;left: 0px;top: 0px;align-items: center;justify-content: center;">
-                    </div>
+                    background: #448899;width: 60px;height: 46px;left: 400px;border-radius: 0px 5px 5px 0px;border-width: 0px;">
+                    <img src="/icon_search.png" class="icon" ></img>
                 </button>
                         
             </div>
@@ -68,7 +66,6 @@
 
         let nextPage=0;
         function getData(){
-            url="/"
             url="http://3.229.198.70:3000/api/attractions?page="+nextPage;
             if (nextPage==null){
                 return "STOP";
@@ -249,12 +246,12 @@
             if(entry && entry.isIntersecting && searchText){
                 setTimeout(() => {
                     search();
-                }, 1500);
+                }, 500);
             }
             else if(entry && entry.isIntersecting ){
                 setTimeout(() => {
                     getData();
-                }, 1500);
+                }, 500);
             }
 
         }
