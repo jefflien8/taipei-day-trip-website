@@ -1,7 +1,7 @@
 from flask import *
 from api import apiBlueprint
 
-app=Flask(__name__,static_folder="public", static_url_path="/")
+app=Flask(__name__,static_folder="public", static_url_path="/public")
 app.register_blueprint(apiBlueprint)
 app.secret_key="123456"
 app.config["JSON_AS_ASCII"]=False

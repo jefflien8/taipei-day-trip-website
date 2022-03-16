@@ -44,6 +44,11 @@ body{
     color: rgba(68, 136, 153, 1);
 
 }
+.search{
+    display: flex;
+    margin-top: 20px;
+    filter: drop-shadow(0px 0px 20px #AABBCC);
+}
 ::placeholder{
     color: #757575;
     font-family: 'Noto Sans TC';
@@ -188,7 +193,6 @@ img{
     }
 }
 @media screen and (min-width: 360px) and (max-width:600px) {
-
     .weclomeImg{
         background-image:url(welcome\ 1\ small.png);
         background-position: right bottom;
@@ -213,11 +217,12 @@ img{
         top: 10px;;
     }
     .front{
+        left: 2%;
         width: 80%;
 
     }
     .search{
-        width: 80%;
+        width: 95%;
         height: 46px;
     }
     input{
