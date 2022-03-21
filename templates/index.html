@@ -80,6 +80,7 @@
                 let allpics = [];
                 let allmrts = [];
                 let allcates = [];
+                let allid = [];
                 for (let i in list){
                     let names=list[i].name;
                     allnames.push(names);
@@ -89,6 +90,8 @@
                     allmrts.push(mrts);
                     let cates=list[i].category;
                     allcates.push(cates);
+                    let id=list[i].id;
+                    allid.push(id);
                 }
                 
                 for (i=0;i<allnames.length;i++){
@@ -97,8 +100,13 @@
                     spotList.appendChild(newDiv);
                     newDiv.className='pic';
                     
+                    let url = document.createElement("a");
+                    url.setAttribute('href',"http://3.229.198.70:3000/attraction/"+allid[i])
+                   
+                    newDiv.appendChild(url);
+
                     let image = document.createElement('img');
-                    newDiv.appendChild(image);
+                    url.appendChild(image);
                     let objectURL =allpics[i];
                     image.src = objectURL;        
 
