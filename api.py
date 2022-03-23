@@ -8,7 +8,7 @@ db=pymysql.connect(
     port=3306, 
     user='root', 
     passwd='12345678', 
-    db='website', 
+    database='website', 
     charset='utf8'
     )
 cursor=db.cursor()

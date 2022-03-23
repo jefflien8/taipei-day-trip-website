@@ -1,13 +1,12 @@
 <!DOCTYPE CSS>
 <html>
 <head>
-    <meta content="width=device-width, initial-scale=1.0" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1"/>
     <title>Taipei Trip 台北一日遊</title>
-    <link rel="stylesheet" type="text/css" href="/public/attraction/layout.css">
+    <link rel="stylesheet" type="text/css" href="/public/attraction/attraction_layout.css">
 </head>
-<body>
+<body onload="getAttraction()">
     <div class="navbar">
         <div class="header">
             <div class="title">台北一日遊</div>
@@ -17,11 +16,193 @@
             </div>
         </div>
     </div>
+    <hr class="hr1">
+    <div class="top">
+        <div class="pic">
+
+            <div class="slider">
+            <ul class="slides" id="slides">
+            </ul>  
+            </div>
+            <span class="left" onclick="left()"></span>    
+            <span class="right" onclick="right()"></span>
+            <ol id="ol"></ol>  
+          
+        </div>
+         
+        <div class="brief">
+            <div id="name" class="name"></div>
+            <div id="what" class="where"></div>
+            <div class="buy">
+                <div class="buy_word">
+                    <div class= "line1">訂購導覽行程</div>
+                    <div class="line2">以此景點為中心的一日行程，帶您探索城市角落故事</div>
+                    <div class="date">
+                        選擇日期：
+                        <input id="date" type="date" value="yy">
+                    </div>
+                    <div class="time">
+                        選擇時間：
+                        <label><input type="radio" checked=true name="radio"  onclick="show2000()"/>  上半天</label>
+                        <label><input type="radio" name="radio"  onclick="show2500()"/>  下半天</label>
+                    </div>
+                    <div class="money">
+                        導覽費用：
+                        <div class="moneytext2000" id="moneytext2000">
+                            新台幣 2000元
+                        </div>
+                        <div class="moneytext2500" id="moneytext2500">
+                            新台幣 2500元
+                        </div>
+                    </div>
+                    <button class="order">
+                        開始預訂行程
+                    </button>
+                </div>
+            </div>
+        </div>            
+
+    </div>
+
+    <hr class="hr2">
+    <div class="infos">
+        <div id="intro" class="getInfo" style="margin-top: 50px;"></div>
+        <div class="vanilla" style="margin-top: 20px;">景點地址:</div>
+        <div id="address" class="getInfo"></div>
+        <div class="vanilla" style="margin-top: 20px;">交通方式:</div>
+        <div id="traffic" class="getInfo"></div>
+    </div>
+    <div class="bottom">
+        COPYRIGHT © 2021 台北一日遊
+    </div>
+<script type="text/javascript">
+
+    let id=window.location.pathname.split('/');
+    console.log(id[2]);
+    let pic = 0;
+
+    function getAttraction(){
+        url="http://3.229.198.70:3000/api/attractions/"+id[2]
+        if (id[2]==null){
+                return "STOP";
+            }
+        fetch(url, {method:"GET"})
+        .then((response) => {
+            return response.json(); 
+        })
+        .then((data) => {
+            let list=data.data;
+            let images=list.images;
+            let piclist=[];
+
+            for (let i in images){
+                let image=images[i];
+                piclist.push(image);
+            }
+
+            console.log(pic);
+            for (let i in piclist){
+                let picFrame = document.getElementById("slides");
+                let eachPic = document.createElement("li");
+                eachPic.className="slides";
+                eachPic.id = i;
+                picFrame.appendChild(eachPic);
+                let Pic = document.createElement("img");
+                eachPic.appendChild(Pic);
+                let url = piclist[i];
+                Pic.src = url;
+
+   
+                let ol = document.getElementById("ol");
+                let divLi = document.createElement("div");
+                divLi.className="dot";
+                ol.appendChild(divLi);
+                let olinput = document.createElement("input");
+                olinput.setAttribute("type", "radio");
+                olinput.name = "dot";
+                olinput.id = "dot"+i;
+                divLi.appendChild(olinput);
+            }
+            let first = document.getElementById("dot0");
+            first.setAttribute("checked","true");
+
+            let showPic = document.getElementById(0);
+            showPic.style.cssText = "display:block";
+
+            let name=document.getElementById("name");
+            let nameText=document.createTextNode(list.name);
+            name.appendChild(nameText);
+
+            let description=document.getElementById("intro");
+            let descriptionText=document.createTextNode(list.description);
+            description.appendChild(descriptionText);
+
+            let address=document.getElementById("address");
+            let addressText=document.createTextNode(list.address);
+            address.appendChild(addressText);
+
+            let transport=document.getElementById("traffic");
+            let transportText=document.createTextNode(list.transport);
+            transport.appendChild(transportText);
+
+            let category=document.getElementById("what");
+            let categoryText=document.createTextNode(list.category);
+            category.appendChild(categoryText);
+
+            let at=document.createTextNode(" at ")
+            category.appendChild(at);
+
+            let mrtText=document.createTextNode(list.mrt);
+            category.appendChild(mrtText);
+        })
+        .catch((err) => {
+            console.log('錯誤:', err);
+        });
+    }
+        
+    let num = 0;
+    function left(){
+        let liNum = document.getElementById("slides").getElementsByTagName("li").length;
+        if (num-1 < 0){
+            return 0;
+        }        
+        let showPic = document.getElementById(num);
+        showPic.style.cssText = "display:none";     
+        let dot = document.getElementById("dot"+(num-1));
+        dot.checked = true;
+        num--;
+        console.log(num);
+    }
 
 
+    function right(){
+        let liNum = document.getElementById("slides").getElementsByTagName("li").length;
+        if(num == liNum-1){
+            return console.log (num);
+        }
+        num++;
+        let showPic = document.getElementById(num);
+        showPic.style.cssText = "display:block";
+        let dot = document.getElementById("dot"+num);
+        dot.checked = true;
+        console.log(num);
+    }
+
+
+    function show2000(){
+        let moneytext2000 = document.getElementById("moneytext2000");
+        let moneytext2500 = document.getElementById("moneytext2500");
+        moneytext2500.style.cssText = "display:none"
+        moneytext2000.style.cssText = "display:block"
+    }
+
+    function show2500(){
+        let moneytext2000 = document.getElementById("moneytext2000");
+        let moneytext2500 = document.getElementById("moneytext2500");
+        moneytext2000.style.cssText = "display:none"
+        moneytext2500.style.cssText = "display:block"
+    }
     
-<script>
-
 </script>  
 </body>
 </html>
