@@ -1,14 +1,13 @@
-<!DOCTYPE CSS>
+<!DOCTYPE html>
 <html>
 <head>
-    <meta content="width=device-width, initial-scale=1.0" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1"/>
     <title>Taipei Trip 台北一日遊</title>
     <link rel="stylesheet" type="text/css" href="public/index/layout.css">
 </head>
 
-<body onload="getData();checkAPI()">
+<body onload="checkAPI()">
     <div id="modalSignin" class="modal">
    
         <div class="modalContent">
@@ -103,81 +102,88 @@
     <script type="text/javascript">
 
         let nextPage=0;
+        let callNext=true;
         function getData(){
+            console.log(callNext);
             url="http://3.229.198.70:3000/api/attractions?page="+nextPage;
             if (nextPage==null){
                 return "STOP";
             }
-            fetch(url, {method:"GET"})
-            .then((response) => {
-                return response.json(); 
-            })
-            .then((data) => {
-                let list=data.data;
-                let allnames = [];
-                let allpics = [];
-                let allmrts = [];
-                let allcates = [];
-                let allid = [];
-                for (let i in list){
-                    let names=list[i].name;
-                    allnames.push(names);
-                    let pics=list[i].images[0];
-                    allpics.push(pics);
-                    let mrts=list[i].mrt;
-                    allmrts.push(mrts);
-                    let cates=list[i].category;
-                    allcates.push(cates);
-                    let id=list[i].id;
-                    allid.push(id);
-                }
-                
-                for (i=0;i<allnames.length;i++){
-                    let spotList=document.getElementById('0');
-                    let newDiv=document.createElement('div');
-                    spotList.appendChild(newDiv);
-                    newDiv.className='pic';
+            if (callNext == true){
+                fetch(url, {method:"GET"})
+                .then((response) => {
+                    return response.json(); 
+                })
+                .then((data) => {
+                    let list=data.data;
+                    let allnames = [];
+                    let allpics = [];
+                    let allmrts = [];
+                    let allcates = [];
+                    let allid = [];
+                    for (let i in list){
+                        let names=list[i].name;
+                        allnames.push(names);
+                        let pics=list[i].images[0];
+                        allpics.push(pics);
+                        let mrts=list[i].mrt;
+                        allmrts.push(mrts);
+                        let cates=list[i].category;
+                        allcates.push(cates);
+                        let id=list[i].id;
+                        allid.push(id);
+                    }
                     
-                    let url = document.createElement("a");
-                    url.setAttribute('href',"http://3.229.198.70:3000/attraction/"+allid[i])
-                   
-                    newDiv.appendChild(url);
+                    for (i=0;i<allnames.length;i++){
+                        let spotList=document.getElementById('0');
+                        let newDiv=document.createElement('div');
+                        spotList.appendChild(newDiv);
+                        newDiv.className='pic';
+                        
+                        let url = document.createElement("a");
+                        url.setAttribute('href',"http://3.229.198.70:3000/attraction/"+allid[i])
+                    
+                        newDiv.appendChild(url);
 
-                    let image = document.createElement('img');
-                    url.appendChild(image);
-                    let objectURL =allpics[i];
-                    image.src = objectURL;        
+                        let image = document.createElement('img');
+                        url.appendChild(image);
+                        let objectURL =allpics[i];
+                        image.src = objectURL;        
 
-                    let word=document.createElement('div');
-                    word.style.cssText="font-weight: 700;font-size: 16px;line-height: 13px;margin-top: 15px;margin-left: 15px;margin-bottom:0px;"
-                    newDiv.appendChild(word);  
-                    let spotName=allnames[i];
-                    let nameNode=document.createTextNode(spotName);
-                    word.appendChild(nameNode);
-                    let flex=document.createElement('div');
-                    flex.style.cssText="display: flex;"
-                    word.appendChild(flex);
+                        let word=document.createElement('div');
+                        word.style.cssText="font-weight: 700;font-size: 16px;line-height: 13px;margin-top: 15px;margin-left: 15px;margin-bottom:0px;"
+                        newDiv.appendChild(word);  
+                        let spotName=allnames[i];
+                        let nameNode=document.createTextNode(spotName);
+                        word.appendChild(nameNode);
+                        let flex=document.createElement('div');
+                        flex.style.cssText="display: flex;"
+                        word.appendChild(flex);
 
-                    let left=document.createElement('div');
-                    left.style.cssText="font-weight: 400;font-size: 16px;line-height: 13px;margin-top: 15px;margin-bottom: 15px;flex: auto;text-align:left;"
-                    flex.appendChild(left);
+                        let left=document.createElement('div');
+                        left.style.cssText="font-weight: 400;font-size: 16px;line-height: 13px;margin-top: 15px;margin-bottom: 15px;flex: auto;text-align:left;"
+                        flex.appendChild(left);
 
-                    let mrtName=allmrts[i];
-                    let mrtNode=document.createTextNode(mrtName);
-                    left.appendChild(mrtNode);
+                        let mrtName=allmrts[i];
+                        let mrtNode=document.createTextNode(mrtName);
+                        left.appendChild(mrtNode);
 
-                    let right=document.createElement('div');
-                    right.style.cssText="font-weight: 400;font-size: 16px;line-height: 13px;margin-top: 15px;margin-bottom: 15px;margin-right:10px;text-align:right;flex: auto;;"
-                    flex.appendChild(right);
-                    let cateName=allcates[i];
-                    let cateNode=document.createTextNode(cateName);
-                    right.appendChild(cateNode);         
-                }                
-                nextPage=data.nextPage;
-            })
+                        let right=document.createElement('div');
+                        right.style.cssText="font-weight: 400;font-size: 16px;line-height: 13px;margin-top: 15px;margin-bottom: 15px;margin-right:10px;text-align:right;flex: auto;;"
+                        flex.appendChild(right);
+                        let cateName=allcates[i];
+                        let cateNode=document.createTextNode(cateName);
+                        right.appendChild(cateNode);         
+                    }                
+                    nextPage=data.nextPage; 
+                    callNext=false;
+                    console.log(callNext);
+                })
+            
             .catch((err) => {
                 console.log('錯誤:', err);
             });
+            }
             }
 
         let nextPageSearch=0;
@@ -282,7 +288,7 @@
         let listEnd=document.getElementById('listEnd');
         let options={
             root:null,
-            rootMargin:"0px 0px 100px 0px",
+            rootMargin:"0px 0px 50px 0px",
             threshold:[0]
         };
         console.log(nextPageSearch[nextPageSearch.length-1]);
@@ -290,22 +296,18 @@
         let callback = ([entry])=>{
             let searchText=document.getElementById("searchText").value;
             if(entry && entry.isIntersecting && searchText){
-                setTimeout(() => {
-                    search();
-                }, 500);
+                search();
             }
-            else if(entry && entry.isIntersecting ){
-                setTimeout(() => {
-                    getData();
-                }, 500);
+            else if(entry && entry.isIntersecting){
+                getData();
             }
-
+            callNext = true;
         }
         let observer=new IntersectionObserver (callback,options);
         observer.observe(listEnd);
     </script>  
 
-    <script>
+    <script type="text/javascript">
     let modalSignin = document.getElementById("modalSignin");
     let modalSignup = document.getElementById("modalSignup");
     let textSignin = document.getElementById("textSignin");

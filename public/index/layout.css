@@ -200,7 +200,7 @@ body{
     height: 320px;
     width: 100%;
 
-    background-image: 
+    background: 
     linear-gradient(135deg, #AADDEE 0%, #66AABB 100%);
     background-repeat:no-repeat;
     background-position:right;
