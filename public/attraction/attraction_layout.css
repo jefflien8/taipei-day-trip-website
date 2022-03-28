@@ -114,6 +114,11 @@ body{
     line-height: 16px;
     color: #FFFFFF;
 }
+.click{
+    cursor: pointer;
+    color: #666666;
+    text-decoration: none
+}
 .messageText{
     color:red;
 }
