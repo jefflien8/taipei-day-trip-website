@@ -22,6 +22,7 @@
                     style="background:#FFFFFF;width: 90%;height: 50px;  padding: 0px;border:1px solid #CCCCCC;border-radius: 5px;"></p>
                 <p><input type="submit" value="登入帳戶" onclick="signinAPI()" ></p>
           
+                <div id="signinErrorText" class="messageText"></div>
             <div class="formChange" onclick="changeSignup()">還沒有帳戶？點此註冊</div>
         </div>
     </div>
@@ -42,7 +43,7 @@
                     style="background:#FFFFFF;width: 90%;height: 50px;  padding: 0px;border:1px solid #CCCCCC;border-radius: 5px 0px 0px 5px;"></p>
                 <p><input type="submit" value="註冊新帳戶" onclick="signupAPI()"></p>
 
-            <div id="messageText" class="messageText">{{message}}</div>
+                <div id="messageText" class="messageText">{{message}}</div>
             <div class="formChange" onclick="changeSignin()">已經有帳戶了？點此登入</div>
         </div>
     </div>
@@ -252,6 +253,7 @@
     let textSignin = document.getElementById("textSignin");
     let textSignout = document.getElementById("textSignout");
     let messageText = document.getElementById("messageText");
+    let signinErrorText = document.getElementById("signinErrorText");
     
         function signin(){      
             modalSignin.style.display = "block";
@@ -304,7 +306,13 @@
             .then((jsonData) => {
             if (jsonData.ok==true){
                 console.log(jsonData.ok);
+                signinErrorText.innerText = "";
                 location.reload();
+            }
+            else{
+                signinErrorText.innerText = "";
+                let signinError = document.createTextNode("帳號或密碼輸入錯誤！");
+                signinErrorText.appendChild(signinError);
             }
             })
             .catch((err) => {
