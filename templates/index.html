@@ -51,7 +51,7 @@
         <div class="header">
             <div class="title">台北一日遊</div>
             <div class="frame2">
-                    <a class="click" style="margin-right: 10px;">預定行程</a>
+                    <a class="click" style="margin-right: 10px;" onclick="booking()">預定行程</a>
                     <a id="textSignin" class="click" onclick="signin()">登入/註冊</a>
                     <a id="textSignout" class="click" onclick="signoutAPI()" style="display: none;">登出系統</a>
             </div>
@@ -443,6 +443,26 @@
             fetch(url, {method: 'DELETE'})
             .then(() => {
                 location.reload()
+            })
+            .catch((err) => {
+                console.log('錯誤:', err);
+            });
+        }
+
+        function booking(){
+            url="/api/user"
+            fetch(url, {method: 'GET'})
+            .then((response) => {
+            console.log(response);
+            return response.json(); 
+            })
+            .then((jsonData) => {
+            if (jsonData.data == null){
+                signin();
+            }
+            else{
+                window.location.href = '/booking';
+            }
             })
             .catch((err) => {
                 console.log('錯誤:', err);

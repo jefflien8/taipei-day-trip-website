@@ -231,3 +231,103 @@ def userDelete():
     session["name"]=None
     session["email"]=None
     return jsonify({"ok": True})
+
+@apiBlueprint.route("/api/booking", methods=["GET"])
+def bookingGet():    
+    if(session['name'] ==None):
+        return jsonify({"error": True,"message": "未登入，拒絕存取"})
+
+    sql = '''SELECT * FROM `shoppingCart` WHERE `member_id`=%s'''
+    cursor.execute(sql,(session['id']))
+    result=cursor.fetchone()
+    print(result)
+    if (result==None):
+        return jsonify({"data":None})
+    else:
+        sql = '''SELECT `name`,`address` FROM `spot` WHERE `id`=%s '''
+        cursor.execute(sql,(result[0]))
+        attractionResult=cursor.fetchone()
+
+        sql = '''SELECT `url` FROM `url` WHERE `url_id`=%s '''
+        cursor.execute(sql,(result[0]))
+        imageResult=cursor.fetchone()
+
+        data={
+                "data": {
+                "attraction": {
+                    "id": result[0],
+                    "name": attractionResult[0],
+                    "address":attractionResult[1] ,
+                    "image": imageResult[0]
+                },
+                "date": result[1],
+                "time": result[2],
+                "price": int(result[3])
+            }
+        }
+        return jsonify(data)
+
+
+@apiBlueprint.route("/api/booking", methods=["POST"])
+def bookingPost():
+    data=request.get_json()
+    attractionId=data["attractionId"]
+    date=data["date"]
+    time=data["time"]
+    price=data["price"]
+
+    sql='''INSERT INTO `shoppingCart`(attaction_id,date,time,price,member_id) 
+        VALUE(%s,%s,%s,%s,%s)'''
+    try:
+        cursor.execute(sql,
+        (attractionId,date,time,price,session['id']))
+        db.commit()
+        error=False
+    except:
+        db.rollback()
+        error=True
+        print('error')
+    db.close
+
+    sql='''UPDATE `shoppingCart` SET attaction_id=%s, date=%s, time=%s, price=%s 
+        WHERE member_id=%s'''
+    try:
+        cursor.execute(sql,
+        (attractionId,date,time,price,session['id']))
+        db.commit()
+        error=False
+    except:
+        db.rollback()
+        error=True
+        print('error')
+    db.close
+    
+    if (error==True):
+        return jsonify({"error": True,"message": "資料未選取完整！"})
+    elif (error==False):
+        return jsonify({"ok": True})
+    elif (session["id"] == None):
+        return jsonify({"error": True,"message": "未登入，拒絕存取"})
+    else:
+        return jsonify({"error": True,"message": "伺服器錯誤，請稍後再試"})
+
+@apiBlueprint.route("/api/booking", methods=["DELETE"])
+def bookingDelete():
+    if (session['id'] !=None):
+        sql = '''DELETE FROM `shoppingCart` WHERE `member_id`=%s'''
+        try:
+            cursor.execute(sql,(session['id']))
+            db.commit()
+        except:
+            db.rollback()
+            print('error')
+        db.close
+
+        return jsonify({"ok": True})
+    else:
+        return jsonify({"error": True,"message": "未登入，拒絕存取"})
+
+@apiBlueprint.route("/getSession", methods=["GET"])
+def getSession():
+    print(session.get("name"))
+    return jsonify({"name": session.get("name"),"email": session.get("email")})
