@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1"/>
+    <title>Taipei Trip 台北一日遊 預定行程</title>
+    <link rel="stylesheet" type="text/css" href="/public/booking/booking_layout.css">
+</head>
+
+<body>
+    <body onload="checkAPI();GetSession();getBooking()">
+        <div id="modalSignin" class="modal">
+       
+            <div class="modalContent">
+                <div class="mpdalHeader"></div>    
+                <span id="closeSignin" onclick="closeSignin()"><img src="/public/index/icon_close.png"> </span>
+                <div class="formTitle">登入會員帳號</div>
+                
+                    <p><input id="email" type="text" placeholder="輸入電子信箱" name="email"
+                        style="background:#FFFFFF;width: 90%;height: 50px;  padding: 0px;border:1px solid #CCCCCC;border-radius: 5px;"></p>
+                    <p><input id="password" type="password" placeholder="輸入密碼" name="password"
+                        style="background:#FFFFFF;width: 90%;height: 50px;  padding: 0px;border:1px solid #CCCCCC;border-radius: 5px;"></p>
+                    <p><input type="submit" value="登入帳戶" onclick="signinAPI()" ></p>
+                        
+                    <div id="signinErrorText" class="messageText"></div>
+                <div class="formChange" onclick="changeSignup()">還沒有帳戶？點此註冊</div>
+            </div>
+        </div>
+    
+        <div id="modalSignup" class="modal">
+            
+            <div class="modalContent2">
+                <div class="mpdalHeader"></div>
+                <span id="closeSignin" onclick="closeSignup()"><img src="/public/index/icon_close.png"> </span>   
+    
+                <div class="formTitle">註冊會員帳號</div>
+    
+                    <p><input id="signupName" type="text" placeholder="輸入姓名" name="name"
+                        style="background:#FFFFFF;width: 90%;height: 50px;  padding: 0px;border:1px solid #CCCCCC;border-radius: 5px 0px 0px 5px;"></p>
+                    <p><input id="signupEmail" type="text" placeholder="輸入電子信箱" name="email"
+                        style="background:#FFFFFF;width: 90%;height: 50px;  padding: 0px;border:1px solid #CCCCCC;border-radius: 5px 0px 0px 5px;"></p>
+                    <p><input id="signupPassword" type="password" placeholder="輸入密碼" name="password"
+                        style="background:#FFFFFF;width: 90%;height: 50px;  padding: 0px;border:1px solid #CCCCCC;border-radius: 5px 0px 0px 5px;"></p>
+                    <p><input type="submit" value="註冊新帳戶" onclick="signupAPI()"></p>
+    
+                    <div id="messageText" class="messageText">{{message}}</div>
+                <div class="formChange" onclick="changeSignin()">已經有帳戶了？點此登入</div>
+            </div>
+        </div>
+    
+        <div class="navbar">
+            <div class="header">
+                <div class="title">台北一日遊</div>
+                <div class="frame2">
+                        <a class="click" style="margin-right: 10px;" onclick="booking()">預定行程</a>
+                        <a id="textSignin" class="click" onclick="signin()">登入/註冊</a>
+                        <a id="textSignout" class="click" onclick="signoutAPI()" style="display: none;">登出系統</a>
+                </div>
+            </div>
+        </div>
+        
+        <hr class="hr1" id="hrTop">
+
+        <div class="headline" id="welcome"></div>
+        <div class="none" id="none"></div>
+
+        <div class="section" id="section">
+            
+            <div class="pic" id="pic"></div>
+
+            <div class="infos">
+                
+                <div class="attraction" id="attraction">
+                    台北一日遊：
+                </div>
+                <div class="date" id="date">
+                    日期：
+                </div>
+                <div class="time" id="time">
+                    時間：
+                </div>
+                <div class="money" id="money">
+                    費用：
+                </div>
+                <div class="address" id="address">
+                    地點：
+                </div>
+                <img src="/public/booking/icon_delete.png" onclick="delBooking()">
+
+            </div>
+        </div>
+
+        <hr class="hr2" id="hrMid">
+
+        <div class="contact" id="contact">
+            <div class="clientContact">
+                您的聯絡資訊
+            </div>
+            <div class="name">聯絡姓名：
+                <input id="contactName" type="text" name="name"
+                style="background:#FFFFFF;width: 200px;height: 38px; padding: 0px;border:1px solid #E8E8E8;border-radius: 5px;box-sizing: border-box;">
+            </div>
+            <div class="email">聯絡信箱：
+                <input id="contactEmail" type="text" name="email"
+                style="background:#FFFFFF;width: 200px;height: 38px; padding: 0px;border:1px solid #E8E8E8;border-radius: 5px;box-sizing: border-box;">
+            </div>
+            <div class="number">手機號碼：
+                <input id="contactNumber" type="text" name="number"
+                style="background:#FFFFFF;width: 200px;height: 38px; padding: 0px;border:1px solid #E8E8E8;border-radius: 5px;box-sizing: border-box;">
+            </div>
+            <div class="remind">
+                請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。
+            </div>
+        </div>
+
+        <hr class="hrBot" id="hrBot">
+
+        <div class="bottom">
+            COPYRIGHT © 2021 台北一日遊
+        </div>
+</body>
+
+<script type="text/javascript">
+    let modalSignin = document.getElementById("modalSignin");
+    let modalSignup = document.getElementById("modalSignup");
+    let textSignin = document.getElementById("textSignin");
+    let textSignout = document.getElementById("textSignout");
+    let messageText = document.getElementById("messageText");
+    let signinErrorText = document.getElementById("signinErrorText");
+    
+        function signin(){      
+            modalSignin.style.display = "block";
+        }
+        function closeSignin(){
+            modalSignin.style.display = "none";
+        }
+
+        function changeSignup(){
+            modalSignin.style.display = "none";
+            modalSignup.style.display = "block";
+        }
+        function changeSignin(){
+            modalSignin.style.display = "block";
+            modalSignup.style.display = "none";
+        }
+
+        function closeSignup(){
+            modalSignup.style.display = "none";
+        }        
+        
+        window.onclick = function(event) {
+            if (event.target == modalSignin) {
+                modalSignin.style.display = "none";
+            }
+            if (event.target == modalSignup) {
+                modalSignup.style.display = "none";
+            }
+        }
+
+        function signinAPI(){
+            let email = document.getElementById("email").value;
+            let password = document.getElementById("password").value;
+            console.log(email);
+            url="/api/user"
+            fetch(url, {
+                body:JSON.stringify({
+                    "email":email,
+                    "password":password
+                }),
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                method: 'PATCH'
+            })
+            .then((response) => {
+            console.log(response);
+            return response.json(); 
+            })
+            .then((jsonData) => {
+            if (jsonData.ok==true){
+                console.log(jsonData.ok);
+                signinErrorText.innerText = "";
+                location.reload();
+            }
+            else{
+                signinErrorText.innerText = "";
+                let signinError = document.createTextNode("帳號或密碼輸入錯誤！");
+                signinErrorText.appendChild(signinError);
+            }
+            })
+            .catch((err) => {
+                console.log('錯誤:', err);
+            });
+        }
+        function signupAPI(){
+            let signupEmail = document.getElementById("signupEmail").value;
+            let signupPassword = document.getElementById("signupPassword").value;
+            let signupName = document.getElementById("signupName").value;
+            console.log(signupEmail);
+            url="/api/user"
+            fetch(url, {
+                body:JSON.stringify({
+                    "name":signupName,
+                    "email":signupEmail,
+                    "password":signupPassword
+                }),
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                method: 'POST'
+            })
+            .then((response) => {
+                console.log(response);
+                return response.json(); 
+            })
+            .then((jsonData) => {
+                if (jsonData.ok==true){
+                    console.log(jsonData.ok);
+                    messageText.innerText = ""
+                    let done = document.createTextNode("已成功註冊！");
+                    messageText.appendChild(done);
+
+                }
+                else{
+                    messageText.innerText = ""
+                    let fail = document.createTextNode(jsonData.message);
+                    messageText.appendChild(fail);
+
+                }
+            })
+            .catch((err) => {
+                console.log('錯誤:', err);
+            });
+        }
+        function checkAPI(){
+            url="/api/user"
+            fetch(url, {method: 'GET'})
+            .then((response) => {
+            console.log(response);
+            return response.json(); 
+            })
+            .then((jsonData) => {
+            if (jsonData.data != null){
+                textSignin.style.display = "none";
+                textSignout.style.display = "block";
+            }
+            else{
+                window.location.href = '/';
+            }
+            })
+            .catch((err) => {
+                console.log('錯誤:', err);
+            });
+        }
+
+        function signoutAPI(){
+            url="/api/user"
+            fetch(url, {method: 'DELETE'})
+            .then(() => {
+                location.reload()
+            })
+            .catch((err) => {
+                console.log('錯誤:', err);
+            });
+        }
+
+        function booking(){
+            url="/api/user"
+            fetch(url, {method: 'GET'})
+            .then((response) => {
+                console.log(response);
+                return response.json(); 
+            })
+            .then((jsonData) => {
+            if (jsonData.data == null){
+                signin();
+            }
+            else{
+                window.location.href = '/booking';
+            }
+            })
+            .catch((err) => {
+                console.log('錯誤:', err);
+            });
+        }
+
+        function getBooking(){
+            url="/api/booking"
+            fetch(url, {method: 'GET'})
+            .then((response) => {
+                console.log(response);
+                return response.json(); 
+            })
+            .then((data) => {
+                if (data.data==null){
+                    let section = document.getElementById("section");
+                    section.style.display = "none";
+                    let contact = document.getElementById("contact");
+                    contact.style.display = "none";
+
+                    let hr2 = document.getElementById("hrMid");
+                    hr2.style.display = "none";
+                    let hr3 = document.getElementById("hrBot");
+                    hr3.style.display = "none";
+                    console.log(1);
+                    
+                    let none = document.getElementById("none");
+                    // let nothing = document.createElement("div");
+                    // headline.appendChild(nothing);
+                    let nothingText = document.createTextNode("目前沒有預定行程唷！");
+                    none.appendChild(nothingText);
+                    console.log(999);
+                }
+                else{
+                let list = data.data;
+
+                let date = list.date;
+                let time = list.time;
+                let price = list.price;
+
+                let attractionInfos = list.attraction;
+
+                let attractionName = attractionInfos.name;
+                let attractionAddress = attractionInfos.address;
+                let attractionUrl = attractionInfos.image;
+
+                let attraction = document.getElementById("attraction");
+                attraction.innerHTML ="台北一日遊："+ attractionName;
+           
+                let dateElement =document.getElementById("date");
+                let dateDiv = document.createElement("div");
+                dateDiv.className = "vanilla";
+                dateElement.appendChild(dateDiv);
+                let dateText = document.createTextNode(date); 
+                dateDiv.appendChild(dateText);
+
+                let timeElement =document.getElementById("time");
+                let timeDiv = document.createElement("div");
+                timeDiv.className = "vanilla";
+                timeElement.appendChild(timeDiv);
+                let timeText = document.createTextNode(time); 
+                timeDiv.appendChild(timeText);
+
+                let moneyElement =document.getElementById("money");
+                let moneyDiv = document.createElement("div");
+                moneyDiv.className = "vanilla";
+                moneyElement.appendChild(moneyDiv);
+                let moneyText = document.createTextNode(price); 
+                moneyDiv.appendChild(moneyText);
+
+                let addressElement =document.getElementById("address");
+                let addressDiv = document.createElement("div");
+                addressDiv.className = "vanilla";
+                addressElement.appendChild(addressDiv);
+                let addressText = document.createTextNode(attractionAddress); 
+                addressDiv.appendChild(addressText);
+
+                let imageElement = document.getElementById("pic");
+                let attractionImage = document.createElement("img");
+                imageElement.appendChild(attractionImage);
+                attractionImage.src = attractionUrl;
+                }
+                
+            })
+            .catch((err) => {
+                console.log('錯誤:', err);
+            });
+        }
+
+        function delBooking(){
+            url="/api/booking"
+            fetch(url, {method: 'DELETE'})
+            .then((response) => {
+                return response.json(); 
+            })
+            .then(() => {
+                location.reload()
+            })
+            .catch((err) => {
+                console.log('錯誤:', err);
+            });
+        }
+
+        function GetSession(){
+            url="/getSession"
+            fetch(url, {method: 'GET'})
+            .then((response) => {
+                return response.json(); 
+            })
+            .then((data) => {
+                console.log(data.email);
+                let nameText = document.getElementById("welcome");
+                nameText.innerHTML = "您好，"+data.name+"，待預定的行程如下："
+
+                let contactName = document.getElementById("contactName");
+                contactName.value = data.name;
+                let contactEmail = document.getElementById("contactEmail");
+                contactEmail.value = data.email;
+            })
+            .catch((err) => {
+                console.log('錯誤:', err);
+            });
+        }
+
+
+    </script>
+
+</html>

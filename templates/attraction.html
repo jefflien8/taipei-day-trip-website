@@ -81,23 +81,23 @@
                     <div class="line2">以此景點為中心的一日行程，帶您探索城市角落故事</div>
                     <div class="date">
                         選擇日期：
-                        <input id="date" type="date" value="yy">
+                        <input id="date" type="date" value="yyyy-MM-dd">
                     </div>
                     <div class="time">
                         選擇時間：
-                        <label><input type="radio" checked=true name="radio"  onclick="show2000()"/>  上半天</label>
-                        <label><input type="radio" name="radio"  onclick="show2500()"/>  下半天</label>
+                        <label><input type="radio" checked=true name="time" value="上半天" onclick="show2000()"/>  上半天</label>
+                        <label><input type="radio" name="time" value="下半天" onclick="show2500()"/>  下半天</label>
                     </div>
                     <div class="money">
                         導覽費用：
-                        <div class="moneytext2000" id="moneytext2000">
+                        <div class="moneytext" id="moneytext2000">
                             新台幣 2000元
                         </div>
-                        <div class="moneytext2500" id="moneytext2500">
+                        <div class="moneytext" id="moneytext2500" style="display:none;">
                             新台幣 2500元
                         </div>
                     </div>
-                    <button class="order">
+                    <button class="order" onclick="bookingNew()">
                         開始預訂行程
                     </button>
                 </div>
@@ -244,7 +244,96 @@
         moneytext2000.style.cssText = "display:none"
         moneytext2500.style.cssText = "display:block"
     }
-    
+
+    function bookingNew(){
+        let url="/api/user";
+        fetch(url, {method: 'GET'})
+        .then((response) => {
+            console.log(response);
+            return response.json(); 
+        })
+        .then((jsonData) => {
+            if (jsonData.data == null){
+                signin();
+            }
+            else{
+                let attractionId=window.location.pathname.split('/');
+                let attractionName = document.getElementById("name").innerText;
+                let attractionAddress = document.getElementById("address").innerText;
+                let attractionImage = document.getElementsByTagName("img")[2].src;
+                let date = document.getElementById("date").value;
+                let time = document.querySelector('[name=time]:checked').value;
+
+                if (time == "上半天"){
+                    let time = "morning";
+                    let price =2000;
+                    console.log(price);
+
+                    let url="/api/booking";
+                    fetch(url, {
+                        body:JSON.stringify({
+                            "attractionId":attractionId[2],
+                            "date":date,
+                            "time":time,
+                            "price":price
+                        }),
+                        headers: {
+                        'Content-Type': 'application/json'
+                        },
+                        method: 'POST'
+                    })
+                    .then((response) => {
+                        console.log(response);
+                        return response.json(); 
+                    })
+                    .then((jsonData) => {
+                        if (jsonData.ok==true){
+                            console.log(jsonData.ok);
+                            window.location.href = '/booking';
+                        }
+                    })
+                    .catch((err) => {
+                        console.log('錯誤:', err);
+                    });
+                    
+                }else{
+                    let time = "afternoon";
+                    let price = 2500;
+                    console.log(price);
+
+                    let url="/api/booking";
+                    fetch(url, {
+                        body:JSON.stringify({
+                            "attractionId":attractionId[2],
+                            "date":date,
+                            "time":time,
+                            "price":price
+                        }),
+                        headers: {
+                        'Content-Type': 'application/json'
+                        },
+                        method: 'POST'
+                    })
+                    .then((response) => {
+                        console.log(response);
+                        return response.json(); 
+                    })
+                    .then((jsonData) => {
+                        if (jsonData.ok==true){
+                            console.log(jsonData.ok);
+                            window.location.href = '/booking';
+                        }
+                    })
+                    .catch((err) => {
+                        console.log('錯誤:', err);
+                    });
+                }
+            }
+        })
+        .catch((err) => {
+                console.log('錯誤:', err);
+            });
+    }
 </script>  
 
 <script type="text/javascript">
@@ -382,6 +471,26 @@
             fetch(url, {method: 'DELETE'})
             .then(() => {
                 location.reload()
+            })
+            .catch((err) => {
+                console.log('錯誤:', err);
+            });
+        }
+
+        function booking(){
+            url="/api/user"
+            fetch(url, {method: 'GET'})
+            .then((response) => {
+                console.log(response);
+                return response.json(); 
+            })
+            .then((jsonData) => {
+            if (jsonData.data == null){
+                signin();
+            }
+            else{
+                window.location.href = '/booking';
+            }
             })
             .catch((err) => {
                 console.log('錯誤:', err);

@@ -1,0 +1,413 @@
+@import url(https://fonts.googleapis.com/earlyaccess/notosanstc.css);
+
+body{
+    font-family: 'Noto Sans TC', '微軟正黑體', sans-serif;
+    margin:0px;
+    padding:0px
+}
+.modal{
+    display: none;
+    position: absolute; 
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%;
+    overflow: auto; 
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+.mpdalHeader{
+    position: relative;
+    top: 0px;
+    padding: 5px ;
+    background: linear-gradient(270deg, #337788 0%, #66AABB 100%);
+    border-radius: 5px 5px 0px 0px;
+}
+.modalContent{
+    background-color: #FFFFFF;
+    margin: auto;
+    margin-top: 70px;
+    border-radius: 6px;
+    box-shadow: 0px 4px 60px #AAAAAA;
+    width: 340px;
+    height: 310px;
+    text-align: center;
+}
+
+.modalContent2{
+    background-color: #FFFFFF;
+    margin: auto;
+    margin-top: 70px;
+    border-radius: 6px;
+    box-shadow: 0px 4px 60px #AAAAAA;
+    width: 340px;
+    height: 380px;
+
+    text-align: center;
+}
+#closeSignin{    
+    position: relative;
+    right: 20px;
+    top: 6px;
+    width: 16px;
+    height: 16px;
+    float: right;
+}
+
+.formTitle{
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 24px;
+    color: #666666;
+    margin-top: 5px;
+}
+.formChange{
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 13px;
+
+    color: #666666;
+}
+.modalContent ::placeholder{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 13px;
+    display: flex;
+    align-items: center;
+    color: #666666;
+}
+.modalContent input[type=submit] {
+    background: #448899;
+    width: 90%;
+    height: 50px;
+    border-radius:5px; 
+    border-width: 0px;
+    cursor:pointer;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 19px;
+    line-height: 16px;
+    color: #FFFFFF;
+}
+.modalContent2 ::placeholder{
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 13px;
+    display: flex;
+    align-items: center;
+    color: #666666;
+}
+.modalContent2 input[type=submit] {
+    background: #448899;
+    width: 90%;
+    height: 50px;
+    border-radius:5px; 
+    border-width: 0px;
+    cursor:pointer;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 19px;
+    line-height: 16px;
+    color: #FFFFFF;
+}
+.click{
+    cursor: pointer;
+    color: #666666;
+    text-decoration: none
+}
+.messageText{
+    color:red;
+}
+
+.hr1 {
+    display: block;
+    position: relative;
+    margin: 8px auto;
+    width: 100%;
+    font-size: 1px;
+    clear: both;
+    border: 1px solid #E8E8E8;
+}
+.hr2{
+    display: block;
+    width: 1200px;
+    border: 1px solid #E8E8E8;
+}
+.hrBot{
+    width: 1200px;
+    border: 1px solid #E8E8E8;
+}
+.navbar{
+    overflow: hidden;
+    display: flex;
+    margin-right: 3px;
+    background: #FFFFFF;
+    width: 100%;
+    height: 54px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    align-items: center;
+    justify-content: center;
+}
+.header{
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    width: 1250px;
+    height: 34px;
+    left: 360px;
+    top: 10px;
+}
+.none{
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: center;
+    justify-content: center;
+    color: red;
+
+}
+.title{
+    display: flex;
+    height: 34px;
+    width: 150px;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 34px;
+    color: rgba(68, 136, 153, 1);
+}
+.frame2{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex:auto;
+    margin-right: 10px;
+    text-align: center ;
+    font-weight: 400;
+    font-size: 16px;
+}
+.bottom{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #757575;
+    position: relative;
+    width: 100%;
+    height: 104px;
+
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 13px;
+
+    justify-content: center;
+    color: #FFFFFF;
+    margin-top: 120px;
+}
+
+.headline{
+    width: 1200px;    
+    height: 27px;
+    margin-top: 35px;
+    margin-left: auto;
+    margin-right: auto;
+
+    font-style: normal;
+    font-weight: 700;
+    font-size: 19px;
+    line-height: 16px;
+    align-items: center;
+    color: #666666;
+}
+.section{
+    display: flex;
+    width: 1150px;    
+    height: 200px;
+    margin-top: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 40px;
+}
+.infos{
+    margin-left: 25px;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 13px;
+    align-items: center;
+    color: #666666;
+}
+.attraction{
+    margin-top: 5px;
+    color: #448899;
+}
+.date{
+    display: flex;
+    margin-top: 30px;
+}
+.time{
+    display: flex;
+    margin-top: 20px;
+}
+.money{
+    display: flex;
+    margin-top: 20px;
+}
+.address{
+    display: flex;
+    margin-top: 20px;
+}
+.vanilla{
+    font-weight: 400;
+}
+.content{
+    font-weight: 400;
+}
+.pic{
+    position: relative;
+
+    width: 250px;
+    height: 200px;
+    background-color: #757575;
+}
+
+.pic img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    aspect-ratio: 16/9;
+}
+.infos img{
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    top: 170px;
+    right: 25%;
+
+}
+
+.contact{
+    width: 1150px;    
+    height: 270px;
+    margin-top: 40px;
+    margin-left: auto;
+    margin-right: auto;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 13px;
+    align-items: center;
+    color: #666666;
+}
+.clientContact{
+    margin-top: 20px;
+    font-weight: 700;
+    font-size: 19px;
+    line-height: 16px;
+}
+.name{
+    margin-top: 30px;
+}
+.email{
+    margin-top: 30px;
+}
+.number{
+    margin-top: 30px;
+}
+.remind{
+    margin-top: 30px;
+    font-weight: 700;
+}
+
+.bottom{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #757575;
+    position: relative;
+    width: 100%;
+    height: 104px;
+
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 13px;
+
+    justify-content: center;
+    color: #FFFFFF;
+    margin-top: 120px;
+}
+
+
+@media screen and (min-width: 360px) and (max-width:1199px) {
+    .header{
+        position: relative;
+        width: 100%;
+        left: 0px;
+        top: 2px;
+    }
+    .title{
+        width: 150px;
+        height: 34px;
+        left: 10px;
+        top: 10px;;
+    }
+    button.order{
+        margin-top: 25px;
+    }
+
+    .hr2{
+        margin-top: 220px;
+        width: 95%;
+    }
+    .hrBot{
+        margin-top: 50px;
+        width: 95%;
+    }
+
+    .headline{
+        width: 95%;    
+    }
+    .section{
+        display: block;
+        width: 95%;  
+        margin-top: 20px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 0px;
+    
+    }
+    .infos{
+        width: 100%;
+        height: 200px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 20px;
+    }
+    .pic{
+        position: relative;
+        width: 100%;
+        background-color: #757575;
+    }
+    .infos img{
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        top: 500px;
+        right: 5%;
+    
+    }
+    .contact{
+        display: block;
+        width: 95%;  
+    }
+    .remind{
+        line-height: 23px;
+    }
+
+}

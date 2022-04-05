@@ -380,7 +380,7 @@ span.right{
     color: #666666;
     margin-bottom: auto;
 }
-.moneytext2000{
+.moneytext{
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -389,7 +389,7 @@ span.right{
     align-items: center;
     color: #666666;
 }
-.moneytext2500{
+/* .moneytext2500{
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
@@ -398,7 +398,7 @@ span.right{
     align-items: center;
     color: #666666;
     display: none;
-}
+} */
 .time input[type='radio']:after {
     width: 15px;
     height: 15px;
