@@ -297,6 +297,7 @@ body{
     margin-top: 40px;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 40px;
 
     font-style: normal;
     font-weight: 400;
@@ -325,6 +326,80 @@ body{
     font-weight: 700;
 }
 
+.tpfield {
+    background:#FFFFFF;
+    width: 200px;
+    height: 38px; 
+    padding: 0px;
+    border:1px solid #E8E8E8;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+.payment{
+    width: 1150px;    
+    height: 270px;
+    margin-top: 40px;
+    margin-left: auto;
+    margin-right: auto;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 13px;
+    align-items: center;
+    color: #666666;
+}
+.paymentContact{
+    margin-top: 20px;
+    font-weight: 700;
+    font-size: 19px;
+    line-height: 16px;
+}
+.creditcard{
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+
+}
+
+.confirm{
+    position: relative;
+    width: 900px;
+    height: 100px;
+    justify-content: end;
+    margin-top: 40px;
+    margin-left: auto;
+    margin-right: auto; 
+
+}
+.finalPay{
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 13px;
+    text-align: right;
+    color: #666666;
+}
+button.order{
+    flex-direction: row;
+    align-items: flex-start;
+    height: 36px;
+    padding: 10px 20px;
+    background: #448899;
+    border-radius: 5px;
+    border-width: 0px;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 19px;
+    line-height: 16px;
+    color:#FFFFFF;
+    margin-top: 40px;
+    
+    position: relative;
+    left: 81%;
+}
+
 .bottom{
     display: flex;
     flex-direction: column;
@@ -342,7 +417,6 @@ body{
     color: #FFFFFF;
     margin-top: 120px;
 }
-
 
 @media screen and (min-width: 360px) and (max-width:1199px) {
     .header{
@@ -403,6 +477,10 @@ body{
     
     }
     .contact{
+        display: block;
+        width: 95%;  
+    }
+    .payment{
         display: block;
         width: 95%;  
     }

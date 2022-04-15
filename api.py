@@ -1,3 +1,5 @@
+import datetime
+import requests
 from flask import *
 from flask_cors import CORS
 import pymysql
@@ -331,3 +333,147 @@ def bookingDelete():
 def getSession():
     print(session.get("name"))
     return jsonify({"name": session.get("name"),"email": session.get("email")})
+
+@apiBlueprint.route("/api/orders", methods=["POST"])
+def orders():
+    if (session['id'] ==None):
+        return jsonify({"error": True,"message": "未登入，拒絕存取"})
+    data=request.get_json()
+    prime=data["prime"]
+    price=data["order"]["price"]
+
+    attraction=data["order"]["trip"]["attraction"]
+    attractionId=attraction["id"]
+    # attractionName=attraction["name"]
+    # attractionAddress=attraction["address"]
+    # attractionImage=attraction["image"]
+
+    date=data["order"]["trip"]["date"]
+    time=data["order"]["trip"]["time"]
+
+    name=data["order"]["contact"]["name"]
+    email=data["order"]["contact"]["email"]
+    phone=data["order"]["contact"]["phone"]
+
+    time=datetime.datetime.now()
+    order_number=time.strftime("%Y%m%d%H%M%S")
+
+    sql = '''INSERT INTO `order`(number,price,date,time,name,email,phone,status,attaction_id,member_id) 
+        VALUE(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'''
+    try:
+        cursor.execute(sql,(order_number,price,date,time,name,email,phone,1,attractionId,session['id']))
+        db.commit()
+        print('ok')
+    except:
+        db.rollback()
+        print('error')
+    db.close
+
+    postData = {
+        "prime": prime,
+        "partner_key": "partner_CXf97Wp1tX1bMOfBoykSltkmX70GmbJgG5EFV2HRh0kk9cBWPynfnNeZ",
+        "merchant_id": "jefflien8_CTBC",
+        "amount": price,
+        "details": "Test",
+        "order_number": order_number,
+        "cardholder": {
+            "phone_number": phone,
+            "name": name,
+            "email": email,
+        },
+        "remember": False
+    }
+
+    headers = {
+        "Content-Type": "application/json",
+        "x-api-key": "partner_CXf97Wp1tX1bMOfBoykSltkmX70GmbJgG5EFV2HRh0kk9cBWPynfnNeZ"
+    }
+
+    res = requests.post('https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime', data=json.dumps(postData), headers=headers)
+    resJson = json.loads(res.content)
+    print(resJson)
+
+    resData = {
+        "data":{
+            "number": resJson["order_number"],
+            "payment": {
+                "status": resJson["status"],
+                "message": resJson["msg"]
+            }
+        }
+    }
+
+    if resJson["status"] == 0:
+        sql = '''UPDATE `order` SET `status`=%s, WHERE `number`=%s'''
+        cursor.execute(sql,(0,resJson["order_number"]))
+        
+        sql = '''DELETE FROM `shoppingCart` WHERE `member_id`=%s`'''
+        try:
+            cursor.execute(sql,(session['id']))
+            db.commit()
+        except:
+            db.rollback()
+            print('error')
+        db.close
+
+        return jsonify(resData)
+    elif resJson["status"] == 1:
+        resData = {
+            "data":{
+                "number": resJson["order_number"],
+                "payment": {
+                    "status": resJson["status"],
+                    "message": resJson["msg"]
+                }
+            }
+        }
+        return jsonify(resData)
+
+    else:
+        return jsonify({"error": True,"message": "訂單建立失敗！"})
+
+
+
+@apiBlueprint.route("/api/orders/<orderNumber>", methods=["GET"])
+def ordersNum(orderNumber):
+    if(session['name'] ==None):
+        return jsonify({"error": True,"message": "未登入，拒絕存取"})
+
+    sql = '''SELECT `number`,`price`,`date`,`time`,`name`,`email`,`phone`,`status`,`attaction_id` FROM order WHERE `number`=%s'''
+    cursor.execute(sql,(orderNumber))
+    result=cursor.fetchone
+
+    sql = '''SELECT `name`,`address` FROM `spot` WHERE `id`=%s'''
+    cursor.execute(sql,(result[8]))
+    attractionResult=cursor.fetchone()
+
+    sql = '''SELECT `url` FROM `url` WHERE `url_id`=%s '''
+    cursor.execute(sql,(result[8]))
+    imageResult=cursor.fetchone()
+
+    if result==None:
+            return jsonify({'data':None})
+    else:
+        orderData={
+            "data": {
+                "number": result[0],
+                "price": result[1],
+                "trip": {
+                    "attraction": {
+                        "id": result[8],
+                        "name": attractionResult[0],
+                        "address":attractionResult[1] ,
+                        "image": imageResult[0]
+                    },
+                "date": result[2],
+                "time": result[3]
+                },
+                "contact": {
+                    "name": result[4],
+                    "email": result[5],
+                    "phone": result[6]
+                },
+                "status": result[7]
+            }
+        }
+        return jsonify(orderData)
