@@ -50,7 +50,7 @@
     
         <div class="navbar">
             <div class="header">
-                <div class="title">台北一日遊</div>
+                <div class="title"><a href="/">台北一日遊</a></div>
                 <div class="frame2">
                         <a class="click" style="margin-right: 10px;" onclick="booking()">預定行程</a>
                         <a id="textSignin" class="click" onclick="signin()">登入/註冊</a>
@@ -432,11 +432,6 @@
             });
         }
 
-
-        // async function sendOrder(){
-        //     await Promise.all([onSubmit()]);
-        //     then(order());
-        // }
         
         function order(){
             let contactName = document.getElementById("contactName").value;
@@ -590,25 +585,18 @@
             const tappayStatus = TPDirect.card.getTappayFieldsStatus()
             // 確認是否可以 getPrime
             if (tappayStatus.canGetPrime === false) {
-                alert('can not get prime')
                 return
             }
 
             // Get prime
             TPDirect.card.getPrime((result) => {
             if (result.status !== 0) {
-                alert('get prime error ' + result.msg)
                 return
             }
             prime = result.card.prime;
             console.log(prime);
             order();
-            alert('get prime 成功，prime: ' + result.card.prime)
             })
-
-            // return new Promise(resolve => {
-            //     console.log("ok");
-            // })
         }
     </script>
 </html>

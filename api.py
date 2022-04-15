@@ -363,7 +363,6 @@ def orders():
     try:
         cursor.execute(sql,(order_number,price,date,time,name,email,phone,1,attractionId,session['id']))
         db.commit()
-        print('ok')
     except:
         db.rollback()
         print('error')
@@ -404,16 +403,22 @@ def orders():
     }
 
     if resJson["status"] == 0:
-        sql = '''UPDATE `order` SET `status`=%s, WHERE `number`=%s'''
-        cursor.execute(sql,(0,resJson["order_number"]))
+        sql = '''UPDATE `order` SET `status`=%s WHERE `number`=%s'''
+        try:
+            cursor.execute(sql,(0,resJson["order_number"]))
+            db.commit()
+        except:
+            db.rollback()
+            print('errorStatus')
+        db.close
         
-        sql = '''DELETE FROM `shoppingCart` WHERE `member_id`=%s`'''
+        sql = '''DELETE FROM `shoppingCart` WHERE `member_id`=%s'''
         try:
             cursor.execute(sql,(session['id']))
             db.commit()
         except:
             db.rollback()
-            print('error')
+            print('errorDEL')
         db.close
 
         return jsonify(resData)
