@@ -52,13 +52,13 @@
         <div class="header">
             <div class="title">台北一日遊</div>
             <div class="frame2">
-                    <a class="click" style="margin-right: 10px;">預定行程</a>
+                    <a class="click" style="margin-right: 10px;" onclick="booking()">預定行程</a>
                     <a id="textSignin" class="click" onclick="signin()">登入/註冊</a>
                     <a id="textSignout" class="click" onclick="signoutAPI()" style="display: none;">登出系統</a>
             </div>
         </div>
     </div>
-    <hr class="hr1">
+
     <div class="top">
         <div class="pic">
 
@@ -117,6 +117,7 @@
     <div class="bottom">
         COPYRIGHT © 2021 台北一日遊
     </div>
+
 <script type="text/javascript">
 
     let id=window.location.pathname.split('/');
