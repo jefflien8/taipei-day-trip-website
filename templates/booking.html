@@ -114,7 +114,7 @@
         </div>
 
         <hr class="hrBot" id="hrBot">
-        <div class="payment">
+        <div class="payment" id="payment">
             <div class="paymentContact">
                 信用卡付款資訊
             </div>
@@ -131,7 +131,7 @@
 
         <hr class="hrBot" id="hrBot2">
 
-        <div class="confirm">
+        <div class="confirm" id="confirm">
             <div class="finalPay" id="finalPay">
                 總價：
             </div>
@@ -329,14 +329,24 @@
                     let contact = document.getElementById("contact");
                     contact.style.display = "none";
 
-                    let hr2 = document.getElementById("hrMid");
-                    hr2.style.display = "none";
-                    let hr3 = document.getElementById("hrBot");
-                    hr3.style.display = "none";
+                    let confirm = document.getElementById("confirm");
+                    confirm.style.display = "none";
+
+                    let payment = document.getElementById("payment");
+                    payment.style.display = "none";
+
+                    let hrMid = document.getElementById("hrMid");
+                    hrMid.style.display = "none";
+                    let hrBot2 = document.getElementById("hrBot2");
+                    hrBot2.style.display = "none";
+                    let hrBot = document.getElementById("hrBot");
+                    hrBot.style.display = "none";
                     
                     let none = document.getElementById("none");
                     let nothingText = document.createTextNode("目前沒有預定行程唷！");
                     none.appendChild(nothingText);
+
+           
                 }
                 else{
                     let list = data.data;

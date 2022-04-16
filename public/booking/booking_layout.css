@@ -491,5 +491,10 @@ button.order{
     .remind{
         line-height: 23px;
     }
+    .confirm{
+        position: absolute;
+        top: 1270px;
+        right: 5%;
+    }
 
 }
