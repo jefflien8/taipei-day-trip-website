@@ -49,7 +49,9 @@
 
     <div class="navbar">
         <div class="header">
-            <div class="title">台北一日遊</div>
+            <div class="title">
+                <a href="/" style="text-decoration:none;color: rgba(68, 136, 153, 1)">台北一日遊</a>
+            </div>
             <div class="frame2">
                     <a class="click" style="margin-right: 10px;" onclick="booking()">預定行程</a>
                     <a id="textSignin" class="click" onclick="signin()">登入/註冊</a>
@@ -106,7 +108,7 @@
         let callNext=true;
         function getData(){
             console.log(callNext);
-            url="http://3.229.198.70:3000/api/attractions?page="+nextPage;
+            url = window.location.href+"api/attractions?page="+nextPage;
             if (nextPage==null){
                 return "STOP";
             }
@@ -142,7 +144,7 @@
                         newDiv.className='pic';
                         
                         let url = document.createElement("a");
-                        url.setAttribute('href',"http://3.229.198.70:3000/attraction/"+allid[i])
+                        url.setAttribute('href',window.location.href+'attraction/'+allid[i])
                     
                         newDiv.appendChild(url);
 

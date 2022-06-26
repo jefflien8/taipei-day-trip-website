@@ -50,7 +50,9 @@
 
     <div class="navbar">
         <div class="header">
-            <div class="title">台北一日遊</div>
+            <div class="title">
+                <a href="/" style="text-decoration:none;color: rgba(68, 136, 153, 1)">台北一日遊</a>
+            </div>
             <div class="frame2">
                     <a class="click" style="margin-right: 10px;" onclick="booking()">預定行程</a>
                     <a id="textSignin" class="click" onclick="signin()">登入/註冊</a>
@@ -123,9 +125,9 @@
     let id=window.location.pathname.split('/');
     console.log(id[2]);
     let pic = 0;
-
+    let page =  (window.location.href.split('/'));
     function getAttraction(){
-        url="http://3.229.198.70:3000/api/attractions/"+id[2]
+        url = page[0]+'//'+page[2]+"/api/"+page[3]+'s/'+page[4];
         if (id[2]==null){
                 return "STOP";
             }
