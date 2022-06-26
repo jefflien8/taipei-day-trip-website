@@ -1,4 +1,4 @@
-# Taipei Trip
+# Taipei Day Trip
 
 Full Stack E-commerce tourism website
 
