@@ -198,7 +198,7 @@
                 return;
             }
             else{
-                url="http://3.229.198.70:3000/api/attractions?page="+nextPageSearch+"&keyword="+searchText;
+                url = window.location.href+"api/attractions?page="+nextPageSearch+"&keyword="+searchText;
                 if(nextPageSearch==null){
                     return "stop";
                 }
@@ -208,10 +208,11 @@
                 })
                 .then((data) =>{
     
-                    let origin=document.getElementsByClassName("pic");
-                    for (let i = 0; i < origin.length; i++) {
-                        origin[i].style.display = "none"; 
+                    let element=document.getElementById("0");
+                    while (element.hasChildNodes() && nextPageSearch == 0) {
+                        element.removeChild(element.firstChild);
                     }
+                    
                     console.log(data.data);
                     if (data.data[0]==null){
                         let nothing=document.getElementById("nothing");
