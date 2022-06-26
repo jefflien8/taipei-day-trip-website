@@ -34,4 +34,4 @@ Show information about the landmark and a Carousel Slider showing the landmark's
 
 ### Order Page
 Show user's order information, paying with TapPay SDK.
-![image](/Image/Order.jpg.jpg)
+![image](/Image/Order.jpg)
