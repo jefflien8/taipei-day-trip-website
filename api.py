@@ -98,9 +98,9 @@ def api():
         `mrt`,`latitude`,`longitude`,`images`FROM `spot` WHERE `name` LIKE %s ORDER BY `id` LIMIT %s,%s'''
         
         con1 = engine.connect()
-        cursor = con1.execute(sql,("%"+keyword+"%",page*12,12))
+        cursor = con1.execute(sql,(("%"+keyword+"%"),page*12,12))
         seachResult = cursor.fetchall()
-        cursor = con1.execute(sql,("%"+keyword+"%",(page+1)*12,12))
+        cursor = con1.execute(sql,(("%"+keyword+"%"),(page+1)*12,12))
         seachResultNext=cursor.fetchall()
         con1.close()
         seachResultNextLen=len(seachResultNext)
@@ -108,7 +108,7 @@ def api():
         for j in seachResult:
             urlsql='''SELECT`url` FROM `url` WHERE `url_id`= %s'''
             con1 = engine.connect()
-            cursor = con1.execute(sql,(urlsql,(j[0])))
+            cursor = con1.execute(urlsql,(j[0]))
             urlResult=cursor.fetchall()
             cursor.close
             url=[url[0] for url in urlResult]
