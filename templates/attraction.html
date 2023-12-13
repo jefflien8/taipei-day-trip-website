@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="/public/attraction/attraction_layout.css">
 </head>
 
-<body onload="getAttraction();checkAPI()">
+<body onload="getAttraction();checkAPI();defaultLogin()">
 
     <div id="modalSignin" class="modal">
    
@@ -498,6 +498,11 @@
             .catch((err) => {
                 console.log('錯誤:', err);
             });
+        }
+        
+        function defaultLogin(){
+        document.getElementById("email").value = "123";
+        document.getElementById("password").value = "123";
         }
     </script>
 </body>

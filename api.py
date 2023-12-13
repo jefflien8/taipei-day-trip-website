@@ -301,39 +301,32 @@ def bookingPost():
     time=data["time"]
     price=data["price"]
 
-    sql='''INSERT INTO `shoppingCart`(attaction_id,date,time,price,member_id) 
-        VALUE(%s,%s,%s,%s,%s)'''
-    con1 = engine.connect()
+    sql_insert_update = '''
+        INSERT INTO `shoppingCart` (member_id, attaction_id, date, time, price)
+        VALUES (%s, %s, %s, %s, %s)
+        ON DUPLICATE KEY UPDATE
+        attaction_id=VALUES(attaction_id),
+        date=VALUES(date),
+        time=VALUES(time),
+        price=VALUES(price)
+    '''
+    con = engine.connect()
+    error = False
     try:
-        cursor = con1.execute(sql,(attractionId,date,time,price,session['id']))
+        cursor = con.execute(sql_insert_update, (session['id'], attractionId, date, time, price))
         # db.commit()
-        error=False
-    except:
+    except Exception as e:
         # db.rollback()
-        error=True
-        print('error')
-    con1.close()
+        error = True
+        print(f'Error during insert or update: {e}')
+    con.close()
 
-    sql='''UPDATE `shoppingCart` SET attaction_id=%s, date=%s, time=%s, price=%s 
-        WHERE member_id=%s'''
-    try:
-        cursor = con1.execute(sql,(attractionId,date,time,price,session['id']))
-        # db.commit()
-        error=False
-    except:
-        # db.rollback()
-        error=True
-        print('error')
-    con1.close()
-    
-    if (error==True):
-        return jsonify({"error": True,"message": "資料未選取完整！"})
-    elif (error==False):
-        return jsonify({"ok": True})
-    elif (session["id"] == None):
-        return jsonify({"error": True,"message": "未登入，拒絕存取"})
+    if error:
+        return jsonify({"error": True, "message": "資料未選取完整！"})
+    elif session["id"] is None:
+        return jsonify({"error": True, "message": "未登入，拒絕存取"})
     else:
-        return jsonify({"error": True,"message": "伺服器錯誤，請稍後再試"})
+        return jsonify({"ok": True})
 
 @apiBlueprint.route("/api/booking", methods=["DELETE"])
 def bookingDelete():

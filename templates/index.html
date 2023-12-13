@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="public/index/layout.css">
 </head>
 
-<body onload="checkAPI()">
+<body onload="checkAPI();defaultLogin()">
     <div id="modalSignin" class="modal">
    
         <div class="modalContent">
@@ -80,7 +80,7 @@
 
             <div class="search">
                         
-                <input tpye="text" id="searchText" placeholder="輸入景點名稱查詢"
+                <input onkeydown="checkEnter(event)" tpye="text" id="searchText" placeholder="輸入景點名稱查詢"
                     style="background:#FFFFFF;width: 400px;height: 46px;  padding: 0px;border-width: 0px;border-radius: 5px 0px 0px 5px;">
                 </input>
             
@@ -118,7 +118,7 @@
                     return response.json(); 
                 })
                 .then((data) => {
-                    let list=data.data;
+                    let list = data.data;
                     let allnames = [];
                     let allpics = [];
                     let allmrts = [];
@@ -145,7 +145,6 @@
                         
                         let url = document.createElement("a");
                         url.setAttribute('href',window.location.href+'attraction/'+allid[i])
-                    
                         newDiv.appendChild(url);
 
                         let image = document.createElement('img');
@@ -188,7 +187,11 @@
             });
             }
             }
-
+        function checkEnter(event) {
+            if (event.keyCode === 13) {
+                search();
+            }
+        }
         let nextPageSearch=0;
         function search(){
             console.log(1);
@@ -228,7 +231,8 @@
                         let searchallnames = [];
                         let searchallpics = [];
                         let searchallmrts = [];
-                        let searchallcates = []
+                        let searchallcates = [];
+                        let searchallid = [];
                         let list=data.data;
                         for (let i in list){
                             let names=list[i].name;
@@ -239,6 +243,8 @@
                             searchallmrts.push(mrts);
                             let cates=list[i].category;
                             searchallcates.push(cates);
+                            let ids = list[i].id;
+                            searchallid.push(ids);
                             }
                         
                         for(let i=0;i<searchallnames.length;i++){
@@ -248,9 +254,13 @@
                             list.appendChild(newDiv);
                             newDiv.className='Searchpic';
 
+                            let link = document.createElement('a');
+                            link.setAttribute('href',window.location.href+'attraction/'+ searchallid[i])
+                            newDiv.appendChild(link);
+
                             let image = document.createElement('img');
-                            newDiv.appendChild(image);
-                            let objectURL =searchallpics[i];
+                            link.appendChild(image);
+                            let objectURL = searchallpics[i];
                             image.src = objectURL;        
 
                             let word=document.createElement('div');
@@ -470,6 +480,10 @@
             .catch((err) => {
                 console.log('錯誤:', err);
             });
+        }
+        function defaultLogin(){
+        document.getElementById("email").value = "123";
+        document.getElementById("password").value = "123";
         }
     </script>
 </body>
