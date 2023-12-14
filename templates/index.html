@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="public/index/layout.css">
 </head>
 
-<body onload="checkAPI()">
+<body onload="checkAPI();defaultLogin()">
     <div id="modalSignin" class="modal">
    
         <div class="modalContent">
@@ -49,7 +49,9 @@
 
     <div class="navbar">
         <div class="header">
-            <div class="title">台北一日遊</div>
+            <div class="title">
+                <a href="/" style="text-decoration:none;color: rgba(68, 136, 153, 1)">台北一日遊</a>
+            </div>
             <div class="frame2">
                     <a class="click" style="margin-right: 10px;" onclick="booking()">預定行程</a>
                     <a id="textSignin" class="click" onclick="signin()">登入/註冊</a>
@@ -78,7 +80,7 @@
 
             <div class="search">
                         
-                <input tpye="text" id="searchText" placeholder="輸入景點名稱查詢"
+                <input onkeydown="checkEnter(event)" tpye="text" id="searchText" placeholder="輸入景點名稱查詢"
                     style="background:#FFFFFF;width: 400px;height: 46px;  padding: 0px;border-width: 0px;border-radius: 5px 0px 0px 5px;">
                 </input>
             
@@ -106,7 +108,7 @@
         let callNext=true;
         function getData(){
             console.log(callNext);
-            url="http://3.229.198.70:3000/api/attractions?page="+nextPage;
+            url = window.location.href+"api/attractions?page="+nextPage;
             if (nextPage==null){
                 return "STOP";
             }
@@ -116,7 +118,7 @@
                     return response.json(); 
                 })
                 .then((data) => {
-                    let list=data.data;
+                    let list = data.data;
                     let allnames = [];
                     let allpics = [];
                     let allmrts = [];
@@ -142,8 +144,7 @@
                         newDiv.className='pic';
                         
                         let url = document.createElement("a");
-                        url.setAttribute('href',"http://3.229.198.70:3000/attraction/"+allid[i])
-                    
+                        url.setAttribute('href',window.location.href+'attraction/'+allid[i])
                         newDiv.appendChild(url);
 
                         let image = document.createElement('img');
@@ -186,7 +187,11 @@
             });
             }
             }
-
+        function checkEnter(event) {
+            if (event.keyCode === 13) {
+                search();
+            }
+        }
         let nextPageSearch=0;
         function search(){
             console.log(1);
@@ -196,7 +201,7 @@
                 return;
             }
             else{
-                url="http://3.229.198.70:3000/api/attractions?page="+nextPageSearch+"&keyword="+searchText;
+                url = window.location.href+"api/attractions?page="+nextPageSearch+"&keyword="+searchText;
                 if(nextPageSearch==null){
                     return "stop";
                 }
@@ -206,10 +211,11 @@
                 })
                 .then((data) =>{
     
-                    let origin=document.getElementsByClassName("pic");
-                    for (let i = 0; i < origin.length; i++) {
-                        origin[i].style.display = "none"; 
+                    let element=document.getElementById("0");
+                    while (element.hasChildNodes() && nextPageSearch == 0) {
+                        element.removeChild(element.firstChild);
                     }
+                    
                     console.log(data.data);
                     if (data.data[0]==null){
                         let nothing=document.getElementById("nothing");
@@ -225,7 +231,8 @@
                         let searchallnames = [];
                         let searchallpics = [];
                         let searchallmrts = [];
-                        let searchallcates = []
+                        let searchallcates = [];
+                        let searchallid = [];
                         let list=data.data;
                         for (let i in list){
                             let names=list[i].name;
@@ -236,6 +243,8 @@
                             searchallmrts.push(mrts);
                             let cates=list[i].category;
                             searchallcates.push(cates);
+                            let ids = list[i].id;
+                            searchallid.push(ids);
                             }
                         
                         for(let i=0;i<searchallnames.length;i++){
@@ -245,9 +254,13 @@
                             list.appendChild(newDiv);
                             newDiv.className='Searchpic';
 
+                            let link = document.createElement('a');
+                            link.setAttribute('href',window.location.href+'attraction/'+ searchallid[i])
+                            newDiv.appendChild(link);
+
                             let image = document.createElement('img');
-                            newDiv.appendChild(image);
-                            let objectURL =searchallpics[i];
+                            link.appendChild(image);
+                            let objectURL = searchallpics[i];
                             image.src = objectURL;        
 
                             let word=document.createElement('div');
@@ -467,6 +480,10 @@
             .catch((err) => {
                 console.log('錯誤:', err);
             });
+        }
+        function defaultLogin(){
+        document.getElementById("email").value = "123";
+        document.getElementById("password").value = "123";
         }
     </script>
 </body>

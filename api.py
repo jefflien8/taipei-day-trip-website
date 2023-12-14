@@ -4,19 +4,24 @@ from flask import *
 from flask_cors import CORS
 import pymysql
 from pymysql import NULL
+from sqlalchemy import create_engine
 # from dbutils.pooled_db import PooledDB, SharedDBConnection
 # import pymysql.cursors
 
 apiBlueprint=Blueprint("api",__name__)
 CORS(apiBlueprint)
-db=pymysql.connect(
-    host='localhost',
-    port=3306,
-    user='root',
-    passwd='12345678',
-    database='website', 
-    charset='utf8'
-)
+
+engine = create_engine(
+    'mysql+pymysql://root:12345678@localhost/website', pool_size=20, max_overflow=0)
+
+# db=pymysql.connect(
+#     host='localhost',
+#     port=3306,
+#     user='root',
+#     passwd='12345678',
+#     database='website', 
+#     charset='utf8'
+# )
 # pool = PooledDB(
 #     creator=pymysql,
 #     maxconnections=6,
@@ -37,7 +42,7 @@ db=pymysql.connect(
 # )
 # conn = pool.connection()
 
-cursor=db.cursor()
+# cursor=db.cursor()
 
 @apiBlueprint.route("/api/attractions")
 def api():
@@ -45,18 +50,24 @@ def api():
     keyword=request.args.get("keyword", None,type=str)
     if keyword ==None:
         sql='''SELECT * FROM `spot` ORDER BY `id` LIMIT %s,%s'''
-        cursor.execute(sql,(page*12,12))
-        result=cursor.fetchall()
-        cursor.execute(sql,((page+1)*12,12))
-        resultNext=cursor.fetchall()
-        cursor.close
+
+        con1 = engine.connect()
+        rows = con1.execute(sql,(page*12,12))
+        result = rows.fetchall()
+        row2 = con1.execute(sql,((page+1)*12,12))
+        resultNext = row2.fetchall()
+        con1.close()
         resultNextLen=len(resultNext)
+
         data=[]
         for i in result:
             urlsql='''SELECT`url` FROM `url` WHERE `url_id`= %s'''
-            cursor.execute(urlsql,(i[0]))
-            urlResult=cursor.fetchall()
-            cursor.close
+            
+            con1 = engine.connect()
+            rows = con1.execute(urlsql,(i[0]))
+            urlResult = rows.fetchall()
+            con1.close()
+            
             url=[url[0] for url in urlResult]
             data.append({
                 "id":i[0],
@@ -85,16 +96,19 @@ def api():
     elif keyword!=None:
         sql='''SELECT `id`,`name`,`category`,`description`,`address`,`transport`,
         `mrt`,`latitude`,`longitude`,`images`FROM `spot` WHERE `name` LIKE %s ORDER BY `id` LIMIT %s,%s'''
-        cursor.execute(sql,("%"+keyword+"%",page*12,12))
-        seachResult=cursor.fetchall()
-        cursor.execute(sql,("%"+keyword+"%",(page+1)*12,12))
+        
+        con1 = engine.connect()
+        cursor = con1.execute(sql,(("%"+keyword+"%"),page*12,12))
+        seachResult = cursor.fetchall()
+        cursor = con1.execute(sql,(("%"+keyword+"%"),(page+1)*12,12))
         seachResultNext=cursor.fetchall()
-        cursor.close
+        con1.close()
         seachResultNextLen=len(seachResultNext)
         sreachData=[]
         for j in seachResult:
             urlsql='''SELECT`url` FROM `url` WHERE `url_id`= %s'''
-            cursor.execute(urlsql,(j[0]))
+            con1 = engine.connect()
+            cursor = con1.execute(urlsql,(j[0]))
             urlResult=cursor.fetchall()
             cursor.close
             url=[url[0] for url in urlResult]
@@ -129,16 +143,19 @@ def api():
 def apiID(attractionId):
     sql='''SELECT `id`,`name`,`category`,`description`,`address`,`transport`,
     `mrt`,`latitude`,`longitude`,`images`FROM `spot` WHERE `id`=%s'''
-    cursor.execute(sql,(attractionId))
+
+    con1 = engine.connect()
+    cursor=con1.execute(sql,(attractionId))
     result=cursor.fetchone()
-    cursor.close
-    if result==None:
+
+    if result == []:
         return {"error": True,"message": "無此編號"}
-    elif result!=None:
+    elif result != []:
         urlsql='''SELECT`url` FROM `url` WHERE `url_id`= %s'''
-        cursor.execute(urlsql,(result[0]))
+
+        cursor=con1.execute(urlsql,(result[0]))
         urlResult=cursor.fetchall()
-        cursor.close
+
         url=[url[0] for url in urlResult]
         Data={
             "data": {
@@ -184,26 +201,25 @@ def userPost():
         return jsonify({"error": True,"message": "請填寫完整"})
 
     sql='''SELECT `email` FROM `member` WHERE `email`=%s'''
-    cursor.execute(sql,(newemail))
+    con1 = engine.connect()
+    cursor=con1.execute(sql,(newemail))
     result=cursor.fetchone()
 
-    if(result !=None):
+    if(result != None):
         return jsonify({"error": True,"message": "Email已經被註冊"})
         
-    elif(result==None):
+    elif(result == None):
         sql='''INSERT INTO `member`(name,email,password) VALUE(%s,%s,%s)'''
         try:
-            cursor.execute(sql,(newname,newemail,newpassword))
-            db.commit()
+            cursor = con1.execute(sql,(newname,newemail,newpassword))
         except:
-            db.rollback()
+            # db.rollback()
             print('error')
-        db.close
+        con1.close()
         
         return jsonify({"ok": True})
     else:
         return jsonify({"error": True,"message": "伺服器錯誤，請稍後再試"})
-
 
 @apiBlueprint.route("/api/user", methods=["PATCH"])
 def userPatch():
@@ -212,23 +228,24 @@ def userPatch():
     password=data["password"]
 
     sql='''SELECT `id`,`name`,`email` FROM `member` WHERE `email`=%s AND `password`=%s'''
-    cursor.execute(sql,(email,password))
-    result=cursor.fetchone()
+    con1 = engine.connect()
+    cursor = con1.execute(sql,(email,password))
+    result = cursor.fetchone()
 
-    if(result!=None):
+    if(result != []):
         session["id"]=result[0]
         session["name"]=result[1]
         session["email"]=result[2]
         session.permanent=True
         return jsonify({"ok": True})
-    elif(result==None):
+    elif(result == []):
         return jsonify({"error": True,"message": "帳號或密碼錯誤"})
     else:
         return jsonify({"error": True,"message": "伺服器錯誤，請稍後再試"})
 
-
 @apiBlueprint.route("/api/user", methods=["DELETE"])
 def userDelete():
+    session.clear()
     session["id"]=None
     session["name"]=None
     session["email"]=None
@@ -240,20 +257,27 @@ def bookingGet():
         return jsonify({"error": True,"message": "未登入，拒絕存取"})
 
     sql = '''SELECT * FROM `shoppingCart` WHERE `member_id`=%s'''
-    cursor.execute(sql,(session['id']))
-    result=cursor.fetchone()
+    
+    con1 = engine.connect()
+    cursor = con1.execute(sql,(session['id']))
+    result = cursor.fetchone()
+
     print(result)
     if (result==None):
         return jsonify({"data":None})
     else:
         sql = '''SELECT `name`,`address` FROM `spot` WHERE `id`=%s '''
-        cursor.execute(sql,(result[0]))
+        
+        con1 = engine.connect()
+        cursor = con1.execute(sql,(result[0]))
         attractionResult=cursor.fetchone()
 
         sql = '''SELECT `url` FROM `url` WHERE `url_id`=%s '''
-        cursor.execute(sql,(result[0]))
-        imageResult=cursor.fetchone()
 
+        con1 = engine.connect()
+        cursor = con1.execute(sql,(result[0]))
+        imageResult=cursor.fetchone()
+        con1.close()
         data={
                 "data": {
                 "attraction": {
@@ -269,7 +293,6 @@ def bookingGet():
         }
         return jsonify(data)
 
-
 @apiBlueprint.route("/api/booking", methods=["POST"])
 def bookingPost():
     data=request.get_json()
@@ -278,52 +301,45 @@ def bookingPost():
     time=data["time"]
     price=data["price"]
 
-    sql='''INSERT INTO `shoppingCart`(attaction_id,date,time,price,member_id) 
-        VALUE(%s,%s,%s,%s,%s)'''
+    sql_insert_update = '''
+        INSERT INTO `shoppingCart` (member_id, attaction_id, date, time, price)
+        VALUES (%s, %s, %s, %s, %s)
+        ON DUPLICATE KEY UPDATE
+        attaction_id=VALUES(attaction_id),
+        date=VALUES(date),
+        time=VALUES(time),
+        price=VALUES(price)
+    '''
+    con = engine.connect()
+    error = False
     try:
-        cursor.execute(sql,
-        (attractionId,date,time,price,session['id']))
-        db.commit()
-        error=False
-    except:
-        db.rollback()
-        error=True
-        print('error')
-    db.close
+        cursor = con.execute(sql_insert_update, (session['id'], attractionId, date, time, price))
+        # db.commit()
+    except Exception as e:
+        # db.rollback()
+        error = True
+        print(f'Error during insert or update: {e}')
+    con.close()
 
-    sql='''UPDATE `shoppingCart` SET attaction_id=%s, date=%s, time=%s, price=%s 
-        WHERE member_id=%s'''
-    try:
-        cursor.execute(sql,
-        (attractionId,date,time,price,session['id']))
-        db.commit()
-        error=False
-    except:
-        db.rollback()
-        error=True
-        print('error')
-    db.close
-    
-    if (error==True):
-        return jsonify({"error": True,"message": "資料未選取完整！"})
-    elif (error==False):
-        return jsonify({"ok": True})
-    elif (session["id"] == None):
-        return jsonify({"error": True,"message": "未登入，拒絕存取"})
+    if error:
+        return jsonify({"error": True, "message": "資料未選取完整！"})
+    elif session["id"] is None:
+        return jsonify({"error": True, "message": "未登入，拒絕存取"})
     else:
-        return jsonify({"error": True,"message": "伺服器錯誤，請稍後再試"})
+        return jsonify({"ok": True})
 
 @apiBlueprint.route("/api/booking", methods=["DELETE"])
 def bookingDelete():
     if (session['id'] !=None):
         sql = '''DELETE FROM `shoppingCart` WHERE `member_id`=%s'''
+        con1 = engine.connect()
         try:
-            cursor.execute(sql,(session['id']))
-            db.commit()
+            cursor = con1.execute(sql,(session['id']))
+            # db.commit()
         except:
-            db.rollback()
+            # db.rollback()
             print('error')
-        db.close
+        con1.close()
 
         return jsonify({"ok": True})
     else:
@@ -360,13 +376,14 @@ def orders():
 
     sql = '''INSERT INTO `order`(number,price,date,time,name,email,phone,status,attaction_id,member_id) 
         VALUE(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)'''
+    con1 = engine.connect()        
     try:
-        cursor.execute(sql,(order_number,price,date,time,name,email,phone,1,attractionId,session['id']))
-        db.commit()
+        cursor = con1.execute(sql,(order_number,price,date,time,name,email,phone,1,attractionId,session['id']))
+        #db.commit()
     except:
-        db.rollback()
+        #db.rollback()
         print('error')
-    db.close
+    con1.close()
 
     postData = {
         "prime": prime,
@@ -405,21 +422,21 @@ def orders():
     if resJson["status"] == 0:
         sql = '''UPDATE `order` SET `status`=%s WHERE `number`=%s'''
         try:
-            cursor.execute(sql,(0,resJson["order_number"]))
-            db.commit()
+            cursor = con1.execute(sql,(0,resJson["order_number"]))
+            #db.commit()
         except:
-            db.rollback()
+            #db.rollback()
             print('errorStatus')
-        db.close
+            con1.close()
         
         sql = '''DELETE FROM `shoppingCart` WHERE `member_id`=%s'''
         try:
-            cursor.execute(sql,(session['id']))
-            db.commit()
+            cursor = con1.execute(sql,(0,session['id']))
+            #db.commit()
         except:
-            db.rollback()
+            #db.rollback()
             print('errorDEL')
-        db.close
+        con1.close()
 
         return jsonify(resData)
     elif resJson["status"] == 1:
@@ -437,23 +454,22 @@ def orders():
     else:
         return jsonify({"error": True,"message": "訂單建立失敗！"})
 
-
-
 @apiBlueprint.route("/api/orders/<orderNumber>", methods=["GET"])
 def ordersNum(orderNumber):
     if(session['name'] ==None):
         return jsonify({"error": True,"message": "未登入，拒絕存取"})
 
     sql = '''SELECT `number`,`price`,`date`,`time`,`name`,`email`,`phone`,`status`,`attaction_id` FROM order WHERE `number`=%s'''
-    cursor.execute(sql,(orderNumber))
+    con1 = engine.connect()
+    cursor = con1.execute(sql,(orderNumber))
     result=cursor.fetchone
 
     sql = '''SELECT `name`,`address` FROM `spot` WHERE `id`=%s'''
-    cursor.execute(sql,(result[8]))
+    cursor = con1.execute(sql,(result[8]))
     attractionResult=cursor.fetchone()
 
     sql = '''SELECT `url` FROM `url` WHERE `url_id`=%s '''
-    cursor.execute(sql,(result[8]))
+    cursor = con1.execute(sql,(result[8]))
     imageResult=cursor.fetchone()
 
     if result==None:
