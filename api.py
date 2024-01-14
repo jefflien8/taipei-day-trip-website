@@ -5,44 +5,12 @@ from flask_cors import CORS
 import pymysql
 from pymysql import NULL
 from sqlalchemy import create_engine
-# from dbutils.pooled_db import PooledDB, SharedDBConnection
-# import pymysql.cursors
 
 apiBlueprint=Blueprint("api",__name__)
 CORS(apiBlueprint)
 
 engine = create_engine(
     'mysql+pymysql://root:12345678@localhost/website', pool_size=20, max_overflow=0)
-
-# db=pymysql.connect(
-#     host='localhost',
-#     port=3306,
-#     user='root',
-#     passwd='12345678',
-#     database='website', 
-#     charset='utf8'
-# )
-# pool = PooledDB(
-#     creator=pymysql,
-#     maxconnections=6,
-#     mincached=2,
-#     maxcached=5,
-#     maxshared=3,
-#     blocking=True,
-#     maxusage=None,
-#     setsession=[],
-#     ping=0,
-#     host='localhost',
-#     port=3306,
-#     user='root',
-#     passwd='123456',
-#     database='website', 
-#     charset='utf8',
-#     Cursor=pymysql.cursors.DictCursor
-# )
-# conn = pool.connection()
-
-# cursor=db.cursor()
 
 @apiBlueprint.route("/api/attractions")
 def api():
@@ -263,7 +231,6 @@ def bookingGet():
     cursor = con1.execute(sql,(session['id']))
     result = cursor.fetchone()
 
-    print(result)
     if (result==None):
         return jsonify({"data":None})
     else:
