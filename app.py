@@ -3,7 +3,8 @@ from api import apiBlueprint
 
 app=Flask(__name__,static_folder="public", static_url_path="/public")
 app.register_blueprint(apiBlueprint)
-app.secret_key="123456"
+app.config['SECRET_KEY']="123456"
+app.config['SESSION_TYPE'] = 'filesystem'
 app.config["JSON_AS_ASCII"]=False
 app.config["TEMPLATES_AUTO_RELOAD"]=True
 
