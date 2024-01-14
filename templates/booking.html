@@ -5,148 +5,186 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1"/>
     <title>Taipei Trip 台北一日遊 預定行程</title>
     <link rel="stylesheet" type="text/css" href="/public/booking/booking_layout.css">
+    <style>body{
+        display: none;
+    }
+    </style>
 </head>
 
 <body>
-    <body onload="checkAPI();GetSession();getBooking()">
-        <div id="modalSignin" class="modal">
-       
-            <div class="modalContent">
-                <div class="mpdalHeader"></div>    
-                <span id="closeSignin" onclick="closeSignin()"><img src="/public/index/icon_close.png"> </span>
-                <div class="formTitle">登入會員帳號</div>
-                
-                    <p><input id="email" type="text" placeholder="輸入電子信箱" name="email"
-                        style="background:#FFFFFF;width: 90%;height: 50px;  padding: 0px;border:1px solid #CCCCCC;border-radius: 5px;"></p>
-                    <p><input id="password" type="password" placeholder="輸入密碼" name="password"
-                        style="background:#FFFFFF;width: 90%;height: 50px;  padding: 0px;border:1px solid #CCCCCC;border-radius: 5px;"></p>
-                    <p><input type="submit" value="登入帳戶" onclick="signinAPI()" ></p>
-                        
-                    <div id="signinErrorText" class="messageText"></div>
-                <div class="formChange" onclick="changeSignup()">還沒有帳戶？點此註冊</div>
-            </div>
-        </div>
+    <div id="modalSignin" class="modal">
     
-        <div id="modalSignup" class="modal">
+        <div class="modalContent">
+            <div class="mpdalHeader"></div>    
+            <span id="closeSignin" onclick="closeSignin()"><img src="/public/index/icon_close.png"> </span>
+            <div class="formTitle">登入會員帳號</div>
             
-            <div class="modalContent2">
-                <div class="mpdalHeader"></div>
-                <span id="closeSignin" onclick="closeSignup()"><img src="/public/index/icon_close.png"> </span>   
-    
-                <div class="formTitle">註冊會員帳號</div>
-    
-                    <p><input id="signupName" type="text" placeholder="輸入姓名" name="name"
-                        style="background:#FFFFFF;width: 90%;height: 50px;  padding: 0px;border:1px solid #CCCCCC;border-radius: 5px 0px 0px 5px;"></p>
-                    <p><input id="signupEmail" type="text" placeholder="輸入電子信箱" name="email"
-                        style="background:#FFFFFF;width: 90%;height: 50px;  padding: 0px;border:1px solid #CCCCCC;border-radius: 5px 0px 0px 5px;"></p>
-                    <p><input id="signupPassword" type="password" placeholder="輸入密碼" name="password"
-                        style="background:#FFFFFF;width: 90%;height: 50px;  padding: 0px;border:1px solid #CCCCCC;border-radius: 5px 0px 0px 5px;"></p>
-                    <p><input type="submit" value="註冊新帳戶" onclick="signupAPI()"></p>
-    
-                    <div id="messageText" class="messageText">{{message}}</div>
-                <div class="formChange" onclick="changeSignin()">已經有帳戶了？點此登入</div>
-            </div>
+                <p><input id="email" type="text" placeholder="輸入電子信箱" name="email"
+                    style="background:#FFFFFF;width: 90%;height: 50px;  padding: 0px;border:1px solid #CCCCCC;border-radius: 5px;"></p>
+                <p><input id="password" type="password" placeholder="輸入密碼" name="password"
+                    style="background:#FFFFFF;width: 90%;height: 50px;  padding: 0px;border:1px solid #CCCCCC;border-radius: 5px;"></p>
+                <p><input type="submit" value="登入帳戶" onclick="signinAPI()" ></p>
+                    
+                <div id="signinErrorText" class="messageText"></div>
+            <div class="formChange" onclick="changeSignup()">還沒有帳戶？點此註冊</div>
         </div>
-    
-        <div class="navbar">
-            <div class="header">
-                <div class="title">
-                    <a href="/" style="text-decoration:none;color: rgba(68, 136, 153, 1)">台北一日遊</a>
-                </div>
-                <div class="frame2">
-                        <a class="click" style="margin-right: 10px;" onclick="booking()">預定行程</a>
-                        <a id="textSignin" class="click" onclick="signin()">登入/註冊</a>
-                        <a id="textSignout" class="click" onclick="signoutAPI()" style="display: none;">登出系統</a>
-                </div>
-            </div>
-        </div>
+    </div>
+
+    <div id="modalSignup" class="modal">
         
-        <hr class="hr1" id="hrTop">
+        <div class="modalContent2">
+            <div class="mpdalHeader"></div>
+            <span id="closeSignin" onclick="closeSignup()"><img src="/public/index/icon_close.png"> </span>   
 
-        <div class="headline" id="welcome"></div>
-        <div class="none" id="none"></div>
+            <div class="formTitle">註冊會員帳號</div>
 
-        <div class="section" id="section">
+                <p><input id="signupName" type="text" placeholder="輸入姓名" name="name"
+                    style="background:#FFFFFF;width: 90%;height: 50px;  padding: 0px;border:1px solid #CCCCCC;border-radius: 5px 0px 0px 5px;"></p>
+                <p><input id="signupEmail" type="text" placeholder="輸入電子信箱" name="email"
+                    style="background:#FFFFFF;width: 90%;height: 50px;  padding: 0px;border:1px solid #CCCCCC;border-radius: 5px 0px 0px 5px;"></p>
+                <p><input id="signupPassword" type="password" placeholder="輸入密碼" name="password"
+                    style="background:#FFFFFF;width: 90%;height: 50px;  padding: 0px;border:1px solid #CCCCCC;border-radius: 5px 0px 0px 5px;"></p>
+                <p><input type="submit" value="註冊新帳戶" onclick="signupAPI()"></p>
+
+                <div id="messageText" class="messageText">{{message}}</div>
+            <div class="formChange" onclick="changeSignin()">已經有帳戶了？點此登入</div>
+        </div>
+    </div>
+
+    <div class="navbar">
+        <div class="header">
+            <div class="title">
+                <a href="/" style="text-decoration:none;color: rgba(68, 136, 153, 1)">台北一日遊</a>
+            </div>
+            <div class="frame2">
+                    <a class="click" style="margin-right: 10px;" onclick="booking()">預定行程</a>
+            </div>
+        </div>
+    </div>
+    
+    <hr class="hr1" id="hrTop">
+
+    <div class="headline" id="welcome"></div>
+    <div class="none" id="none"></div>
+
+    <div class="section" id="section">
+        
+        <div class="pic" id="pic"></div>
+
+        <div class="infos">
             
-            <div class="pic" id="pic"></div>
-
-            <div class="infos">
-                
-                <div class="attraction" id="attraction">
-                    台北一日遊：
-                </div>
-                <div class="date" id="date">
-                    日期：
-                </div>
-                <div class="time" id="time">
-                    時間：
-                </div>
-                <div class="money" id="money">
-                    費用：
-                </div>
-                <div class="address" id="address">
-                    地點：
-                </div>
-                <img src="/public/booking/icon_delete.png" onclick="delBooking()">
-
+            <div class="attraction" id="attraction">
+                台北一日遊：
             </div>
+            <div class="date" id="date">
+                日期：
+            </div>
+            <div class="time" id="time">
+                時間：
+            </div>
+            <div class="money" id="money">
+                費用：
+            </div>
+            <div class="address" id="address">
+                地點：
+            </div>
+            <img src="/public/booking/icon_delete.png" onclick="delBooking()">
+
         </div>
+    </div>
 
-        <hr class="hr2" id="hrMid">
+    <hr class="hr2" id="hrMid">
 
-        <div class="contact" id="contact">
-            <div class="clientContact">
-                您的聯絡資訊
-            </div>
-            <div class="name">聯絡姓名：
-                <input id="contactName" type="text" name="name"
-                style="background:#FFFFFF;width: 200px;height: 38px; padding: 0px;border:1px solid #E8E8E8;border-radius: 5px;box-sizing: border-box;">
-            </div>
-            <div class="email">聯絡信箱：
-                <input id="contactEmail" type="text" name="email"
-                style="background:#FFFFFF;width: 200px;height: 38px; padding: 0px;border:1px solid #E8E8E8;border-radius: 5px;box-sizing: border-box;">
-            </div>
-            <div class="number">手機號碼：
-                <input id="contactNumber" type="text" name="number"
-                style="background:#FFFFFF;width: 200px;height: 38px; padding: 0px;border:1px solid #E8E8E8;border-radius: 5px;box-sizing: border-box;">
-            </div>
-            <div class="remind">
-                請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。
-            </div>
+    <div class="contact" id="contact">
+        <div class="clientContact">
+            您的聯絡資訊
         </div>
-
-        <hr class="hrBot" id="hrBot">
-        <div class="payment" id="payment">
-            <div class="paymentContact">
-                信用卡付款資訊
-            </div>
-            <div class="creditcard">卡片號碼：
-                <div class="tpfield" id="card-number"></div>
-            </div>
-            <div class="creditcard">過期時間：
-                <div class="tpfield" id="card-expiration-date"></div>
-            </div>
-            <div class="creditcard">驗證密碼：
-                <div class="tpfield" id="card-ccv"></div>
-            </div>
+        <div class="name">聯絡姓名：
+            <input id="contactName" type="text" name="name"
+            style="background:#FFFFFF;width: 200px;height: 38px; padding: 0px;border:1px solid #E8E8E8;border-radius: 5px;box-sizing: border-box;">
         </div>
-
-        <hr class="hrBot" id="hrBot2">
-
-        <div class="confirm" id="confirm">
-            <div class="finalPay" id="finalPay">
-                總價：
-            </div>
-            <button class="order" onclick="onSubmit()">
-                確認訂購並付款
-            </button>
+        <div class="email">聯絡信箱：
+            <input id="contactEmail" type="text" name="email"
+            style="background:#FFFFFF;width: 200px;height: 38px; padding: 0px;border:1px solid #E8E8E8;border-radius: 5px;box-sizing: border-box;">
         </div>
-        <div class="bottom">
-            COPYRIGHT © 2021 台北一日遊
+        <div class="number">手機號碼：
+            <input id="contactNumber" type="text" name="number"
+            style="background:#FFFFFF;width: 200px;height: 38px; padding: 0px;border:1px solid #E8E8E8;border-radius: 5px;box-sizing: border-box;">
         </div>
-</body>
+        <div class="remind">
+            請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。
+        </div>
+    </div>
 
-<script type="text/javascript">
+    <hr class="hrBot" id="hrBot">
+    <div class="payment" id="payment">
+        <div class="paymentContact">
+            信用卡付款資訊
+        </div>
+        <div class="creditcard">卡片號碼：
+            <div class="tpfield" id="card-number"></div>
+        </div>
+        <div class="creditcard">過期時間：
+            <div class="tpfield" id="card-expiration-date"></div>
+        </div>
+        <div class="creditcard">驗證密碼：
+            <div class="tpfield" id="card-ccv"></div>
+        </div>
+    </div>
+
+    <hr class="hrBot" id="hrBot2">
+
+    <div class="confirm" id="confirm">
+        <div class="finalPay" id="finalPay">
+            總價：
+        </div>
+        <button class="order" onclick="onSubmit()">
+            確認訂購並付款
+        </button>
+    </div>
+    <div class="bottom">
+        COPYRIGHT © 2021 台北一日遊
+    </div>
+
+    <script async>     
+        document.addEventListener('DOMContentLoaded', function() {
+                checkApiBeforeLoadingHTML();
+            });
+        async function checkApiBeforeLoadingHTML(){
+            try {
+                const response = await fetch('/api/user');
+                const data = await response.json();
+
+                // 根據 API 回傳的數據進行相應的處理
+                if (data.data) {
+                    // 創建<a>元素
+                    var signinLink = document.createElement('a');
+                    signinLink.id = 'textSignout';
+                    signinLink.className = 'click';
+                    signinLink.textContent = '登出系統';
+                    signinLink.onclick = signoutAPI;
+                    // 將<a>元素附加到已經存在的<div>元素
+                    var frame2Element = document.querySelector('.frame2');
+                    frame2Element.appendChild(signinLink);
+                } 
+                else {
+                    var signinLink = document.createElement('a');
+                    signinLink.id = 'textSignin';
+                    signinLink.className = 'click';
+                    signinLink.textContent = '登入/註冊';
+                    signinLink.onclick = signin;
+                    // 將<a>元素附加到已經存在的<div>元素
+                    var frame2Element = document.querySelector('.frame2');
+                    frame2Element.appendChild(signinLink);
+                }
+                getSession();
+            } catch (error) {
+                console.error('API 確認錯誤：', error);
+            }
+        }
+    </script>
+
+    <script type="text/javascript">
     let modalSignin = document.getElementById("modalSignin");
     let modalSignup = document.getElementById("modalSignup");
     let textSignin = document.getElementById("textSignin");
@@ -403,7 +441,7 @@
                     imageElement.appendChild(attractionImage);
                     attractionImage.src = attractionUrl;
                 }
-                
+                document.body.style.display = 'block';
             })
             .catch((err) => {
                 console.log('錯誤:', err);
@@ -424,7 +462,7 @@
             });
         }
 
-        function GetSession(){
+        function getSession(){
             url="/getSession"
             fetch(url, {method: 'GET'})
             .then((response) => {
@@ -438,6 +476,7 @@
                 contactName.value = data.name;
                 let contactEmail = document.getElementById("contactEmail");
                 contactEmail.value = data.email;
+                getBooking();
             })
             .catch((err) => {
                 console.log('錯誤:', err);
@@ -490,14 +529,13 @@
                 .catch((err) => {
                     console.log('錯誤:', err);
                 });
-            
-
         }
 
     </script>
 
     <script src="https://js.tappaysdk.com/tpdirect/v5.8.0"></script>
     <script>
+        //TapPay 金流
         TPDirect.setupSDK(124046, 'app_bK4iavT4BpzCA9ToQOzjvrLkPrJF17grHxuDt8llIpqI3wiQSLcu9iSlua6P', 'sandbox')
         let fields = {
             number: {
@@ -611,4 +649,5 @@
             })
         }
     </script>
+</body>
 </html>
