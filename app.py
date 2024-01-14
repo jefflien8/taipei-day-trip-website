@@ -1,6 +1,5 @@
 from flask import *
 from api import apiBlueprint
-from datetime import timedelta
 
 app=Flask(__name__,static_folder="public", static_url_path="/public")
 app.register_blueprint(apiBlueprint)
@@ -11,12 +10,9 @@ app.config["TEMPLATES_AUTO_RELOAD"]=True
 
 
 # Pages
-@app.before_request
-def make_session_permanent():
-    session.permanent = True
-    app.permanent_session_lifetime = timedelta(minutes=30)
-    if not session.get('name'):
-        session['name'] = None
+@app.before_first_request
+def make_session():
+    session['name'] = None
 @app.route("/")
 def index():
 	return render_template("index.html")

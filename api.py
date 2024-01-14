@@ -146,7 +146,7 @@ def apiID(attractionId):
 
 @apiBlueprint.route("/api/user", methods=["GET"])
 def userGet():
-    if session['name'] is None:
+    if 'name' not in session or session['name'] is None:
         return jsonify({"data": None})
     else:
         name = session.get("name")
