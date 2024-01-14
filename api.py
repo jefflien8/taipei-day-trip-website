@@ -146,21 +146,20 @@ def apiID(attractionId):
 
 @apiBlueprint.route("/api/user", methods=["GET"])
 def userGet():
-    user_id = session.get("id")
-    name = session.get("name")
-    email = session.get("email")
-
-    if name is None:
+    if not session:
         return jsonify({"data": None})
-    
-    data = {
-        "data": {
-            "id": user_id,
-            "name": name,
-            "email": email
+    else:
+        name = session.get("name")
+        user_id = session.get("id")
+        email = session.get("email")
+        data = {
+            "data": {
+                "id": user_id,
+                "name": name,
+                "email": email
+            }
         }
-    }
-    return jsonify(data)
+        return jsonify(data)
 
 @apiBlueprint.route("/api/user", methods=["POST"])
 def userPost():
@@ -169,7 +168,7 @@ def userPost():
     newemail=data["email"]
     newpassword=data["password"]
 
-    if (newname=="")|(newemail=="")|(newpassword==""):
+    if (newname=="") or (newemail=="") or (newpassword==""):
         return jsonify({"error": True,"message": "請填寫完整"})
 
     sql='''SELECT `email` FROM `member` WHERE `email`=%s'''
@@ -218,9 +217,6 @@ def userPatch():
 @apiBlueprint.route("/api/user", methods=["DELETE"])
 def userDelete():
     session.clear()
-    session["id"]=None
-    session["name"]=None
-    session["email"]=None
     return jsonify({"ok": True})
 
 @apiBlueprint.route("/api/booking", methods=["GET"])
